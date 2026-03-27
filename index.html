@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Französisch Quiz 🌟</title>
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --rosa: #f9a8d4;
+    --rosa-dark: #ec4899;
+    --rosa-light: #fce7f3;
+    --gelb: #fde68a;
+    --gelb-dark: #f59e0b;
+    --gelb-light: #fefce8;
+    --gruen: #86efac;
+    --gruen-dark: #16a34a;
+    --gruen-light: #f0fdf4;
+    --correct: #4ade80;
+    --wrong: #f87171;
+    --bg: #fff9fb;
+    --text: #1e1b4b;
+    --radius: 20px;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'Nunito', sans-serif;
+    background: var(--bg);
+    min-height: 100vh;
+    color: var(--text);
+    background-image: radial-gradient(circle at 20% 20%, #fce7f3 0%, transparent 40%),
+                      radial-gradient(circle at 80% 80%, #fefce8 0%, transparent 40%),
+                      radial-gradient(circle at 60% 10%, #f0fdf4 0%, transparent 30%);
+  }
+
+  header {
+    text-align: center;
+    padding: 30px 20px 10px;
+  }
+
+  header h1 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2.4rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ec4899, #f59e0b, #16a34a);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    letter-spacing: -0.5px;
+  }
+
+  header p {
+    color: #9ca3af;
+    font-size: 1rem;
+    margin-top: 4px;
+    font-weight: 600;
+  }
+
+  /* TAB NAV */
+  .tabs {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    padding: 20px;
+    flex-wrap: wrap;
+  }
+
+  .tab-btn {
+    padding: 10px 22px;
+    border-radius: 50px;
+    border: 3px solid transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  }
+
+  .tab-btn.rosa { border-color: var(--rosa-dark); color: var(--rosa-dark); }
+  .tab-btn.rosa.active { background: var(--rosa-dark); color: white; }
+  .tab-btn.gelb { border-color: var(--gelb-dark); color: var(--gelb-dark); }
+  .tab-btn.gelb.active { background: var(--gelb-dark); color: white; }
+  .tab-btn.gruen { border-color: var(--gruen-dark); color: var(--gruen-dark); }
+  .tab-btn.gruen.active { background: var(--gruen-dark); color: white; }
+
+  /* DIRECTION TOGGLE */
+  .direction-toggle {
+    display: flex;
+    justify-content: center;
+    gap: 0;
+    margin: 0 auto 24px;
+    width: fit-content;
+    border-radius: 50px;
+    overflow: hidden;
+    border: 2.5px solid #e5e7eb;
+    background: white;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+  }
+
+  .dir-btn {
+    padding: 9px 20px;
+    border: none;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.88rem;
+    font-weight: 700;
+    cursor: pointer;
+    background: white;
+    color: #6b7280;
+    transition: all 0.2s;
+  }
+
+  .dir-btn.active {
+    background: var(--active-color, #ec4899);
+    color: white;
+  }
+
+  /* QUIZ AREA */
+  .quiz-container {
+    max-width: 580px;
+    margin: 0 auto;
+    padding: 0 20px 60px;
+    display: none;
+  }
+  .quiz-container.visible { display: block; }
+
+  /* PROGRESS */
+  .progress-bar-wrap {
+    background: #f3f4f6;
+    border-radius: 50px;
+    height: 10px;
+    margin-bottom: 8px;
+    overflow: hidden;
+  }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    transition: width 0.4s ease;
+  }
+  .progress-info {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.82rem;
+    color: #9ca3af;
+    font-weight: 700;
+    margin-bottom: 20px;
+  }
+
+  /* CARD */
+  .card {
+    background: white;
+    border-radius: var(--radius);
+    padding: 36px 30px 28px;
+    text-align: center;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
+    border-top: 6px solid var(--card-color, #ec4899);
+    animation: slideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.96); }
+    to   { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .card-label {
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    color: #9ca3af;
+    margin-bottom: 10px;
+  }
+
+  .card-word {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2.2rem;
+    font-weight: 800;
+    color: var(--text);
+    margin-bottom: 30px;
+    line-height: 1.2;
+  }
+
+  /* ANSWER BUTTONS */
+  .answers {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+
+  .ans-btn {
+    padding: 14px 12px;
+    border-radius: 14px;
+    border: 2.5px solid #e5e7eb;
+    background: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    color: var(--text);
+    transition: all 0.15s ease;
+    line-height: 1.3;
+  }
+
+  .ans-btn:hover:not(:disabled) {
+    border-color: var(--card-color, #ec4899);
+    background: var(--card-light, #fce7f3);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  }
+
+  .ans-btn.correct {
+    background: #dcfce7;
+    border-color: #16a34a;
+    color: #15803d;
+  }
+
+  .ans-btn.wrong {
+    background: #fee2e2;
+    border-color: #ef4444;
+    color: #b91c1c;
+  }
+
+  .ans-btn:disabled { cursor: default; transform: none; }
+
+  /* FEEDBACK */
+  .feedback {
+    margin-top: 20px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    min-height: 36px;
+    animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes popIn {
+    from { opacity: 0; transform: scale(0.7); }
+    to   { opacity: 1; transform: scale(1); }
+  }
+
+  .feedback.correct { color: #16a34a; }
+  .feedback.wrong   { color: #ef4444; }
+
+  /* NEXT BUTTON */
+  .next-btn {
+    display: block;
+    margin: 18px auto 0;
+    padding: 12px 36px;
+    border-radius: 50px;
+    border: none;
+    background: var(--card-color, #ec4899);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1rem;
+    font-weight: 800;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+  }
+  .next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
+  .next-btn:active { transform: translateY(0); }
+  .next-btn.hidden { display: none; }
+
+  /* RESULT SCREEN */
+  .result-screen {
+    text-align: center;
+    padding: 40px 20px;
+    animation: slideIn 0.4s ease;
+  }
+
+  .result-emoji { font-size: 5rem; margin-bottom: 16px; }
+
+  .result-screen h2 {
+    font-family: 'Baloo 2', cursive;
+    font-size: 2rem;
+    font-weight: 800;
+    margin-bottom: 10px;
+  }
+
+  .result-score {
+    font-size: 3rem;
+    font-weight: 900;
+    margin: 10px 0 20px;
+  }
+
+  .result-screen p {
+    color: #6b7280;
+    font-size: 1rem;
+    font-weight: 600;
+    margin-bottom: 24px;
+  }
+
+  .restart-btn {
+    padding: 14px 40px;
+    border-radius: 50px;
+    border: none;
+    background: linear-gradient(135deg, #ec4899, #f59e0b);
+    color: white;
+    font-family: 'Nunito', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 800;
+    cursor: pointer;
+    box-shadow: 0 4px 20px rgba(236,72,153,0.35);
+    transition: all 0.2s;
+  }
+  .restart-btn:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(236,72,153,0.4); }
+
+  .stars {
+    font-size: 1.8rem;
+    margin-bottom: 6px;
+    letter-spacing: 4px;
+  }
+
+  /* ANIMATION CANVAS */
+  #anim-canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* RESULT ANIMATIONS */
+  .result-screen { position: relative; }
+
+  .result-emoji {
+    display: inline-block;
+    animation: bounceIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  @keyframes bounceIn {
+    0%   { transform: scale(0) rotate(-20deg); opacity: 0; }
+    60%  { transform: scale(1.3) rotate(5deg); }
+    100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  }
+
+  .result-screen h2 {
+    animation: fadeSlideUp 0.5s ease 0.2s both;
+  }
+
+  .result-score {
+    animation: fadeSlideUp 0.5s ease 0.35s both;
+  }
+
+  @keyframes fadeSlideUp {
+    from { opacity: 0; transform: translateY(15px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* SUN RAYS */
+  .sun-container {
+    position: relative;
+    width: 120px;
+    height: 120px;
+    margin: 0 auto 16px;
+  }
+
+  .sun {
+    width: 80px; height: 80px;
+    background: radial-gradient(circle, #fde68a, #f59e0b);
+    border-radius: 50%;
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    box-shadow: 0 0 30px #fde68a, 0 0 60px #f59e0b44;
+    animation: sunPulse 2s ease-in-out infinite;
+  }
+
+  @keyframes sunPulse {
+    0%, 100% { box-shadow: 0 0 30px #fde68a, 0 0 60px #f59e0b44; transform: translate(-50%,-50%) scale(1); }
+    50% { box-shadow: 0 0 50px #fde68a, 0 0 90px #f59e0b66; transform: translate(-50%,-50%) scale(1.07); }
+  }
+
+  .sun-ray {
+    position: absolute;
+    top: 50%; left: 50%;
+    width: 4px;
+    height: 20px;
+    background: linear-gradient(to bottom, #fde68a, transparent);
+    border-radius: 4px;
+    transform-origin: 50% 60px;
+    animation: rayRotate 8s linear infinite;
+  }
+
+  @keyframes rayRotate { to { transform: rotate(360deg); } }
+
+  /* RAINBOW */
+  .rainbow-wrap {
+    width: 200px; height: 100px;
+    margin: 0 auto 16px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .rainbow-arc {
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    position: absolute;
+    top: 0; left: 0;
+    border: 14px solid transparent;
+    animation: rainbowAppear 1s ease both;
+  }
+
+  @keyframes rainbowAppear {
+    from { opacity: 0; transform: scaleX(0.5); }
+    to   { opacity: 1; transform: scaleX(1); }
+  }
+
+  /* RAIN DROPS */
+  .rain-wrap {
+    position: relative;
+    height: 80px;
+    margin-bottom: 10px;
+    overflow: hidden;
+  }
+
+  .raindrop {
+    position: absolute;
+    width: 3px;
+    border-radius: 50px;
+    background: linear-gradient(to bottom, #93c5fd, #3b82f6);
+    animation: falling linear infinite;
+  }
+
+  @keyframes falling {
+    0%   { transform: translateY(-20px); opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { transform: translateY(80px); opacity: 0; }
+  }
+
+  .cloud-svg { animation: cloudFloat 3s ease-in-out infinite; }
+  @keyframes cloudFloat {
+    0%, 100% { transform: translateY(0); }
+    50%       { transform: translateY(-6px); }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="anim-canvas"></canvas>
+
+<header>
+  <h1>🇫🇷 Französisch Üben</h1>
+  <p>Mille feuilles 4 · C'est le monde !</p>
+</header>
+
+<div class="tabs">
+  <button class="tab-btn rosa active" onclick="selectTab('rosa')">🌸 Liste 8 – Rosa</button>
+  <button class="tab-btn gelb" onclick="selectTab('gelb')">🌟 Liste 9 – Gelb</button>
+  <button class="tab-btn gruen" onclick="selectTab('gruen')">🌿 Liste 10 – Grün</button>
+</div>
+
+<!-- QUIZ SECTIONS -->
+<div id="quiz-rosa" class="quiz-container visible" style="--card-color:#ec4899; --card-light:#fce7f3; --active-color:#ec4899;">
+  <div class="direction-toggle">
+    <button class="dir-btn active" onclick="setDirection('rosa','fr-de')">🇫🇷 → 🇩🇪</button>
+    <button class="dir-btn" onclick="setDirection('rosa','de-fr')">🇩🇪 → 🇫🇷</button>
+  </div>
+  <div id="quiz-area-rosa"></div>
+</div>
+
+<div id="quiz-gelb" class="quiz-container" style="--card-color:#f59e0b; --card-light:#fefce8; --active-color:#f59e0b;">
+  <div class="direction-toggle">
+    <button class="dir-btn active" onclick="setDirection('gelb','fr-de')">🇫🇷 → 🇩🇪</button>
+    <button class="dir-btn" onclick="setDirection('gelb','de-fr')">🇩🇪 → 🇫🇷</button>
+  </div>
+  <div id="quiz-area-gelb"></div>
+</div>
+
+<div id="quiz-gruen" class="quiz-container" style="--card-color:#16a34a; --card-light:#f0fdf4; --active-color:#16a34a;">
+  <div class="direction-toggle">
+    <button class="dir-btn active" onclick="setDirection('gruen','fr-de')">🇫🇷 → 🇩🇪</button>
+    <button class="dir-btn" onclick="setDirection('gruen','de-fr')">🇩🇪 → 🇫🇷</button>
+  </div>
+  <div id="quiz-area-gruen"></div>
+</div>
+
+<script>
+// ──────────────────────────────────────────
+// VOCABULARY DATA
+// ──────────────────────────────────────────
+const vocab = {
+  rosa: [
+    { fr: "la montagne", de: "der Berg" },
+    { fr: "la rivière", de: "der Fluss" },
+    { fr: "le lac", de: "der See" },
+    { fr: "le champ", de: "das Feld" },
+    { fr: "la vallée", de: "das Tal" },
+    { fr: "le ciel", de: "der Himmel" },
+    { fr: "le temps", de: "das Wetter / die Zeit" },
+    { fr: "les nuages", de: "die Wolken" },
+    { fr: "le soleil", de: "die Sonne" },
+    { fr: "la lune", de: "der Mond" },
+    { fr: "le vent", de: "der Wind" },
+    { fr: "la neige", de: "der Schnee" },
+    { fr: "la pluie", de: "der Regen" },
+    { fr: "le verglas", de: "das Glatteis" },
+    { fr: "Il y a du soleil.", de: "Die Sonne scheint." },
+    { fr: "Il y a des nuages.", de: "Es hat Wolken." },
+    { fr: "Il y a du vent.", de: "Es windet." },
+    { fr: "Il y a de la neige.", de: "Es hat Schnee." },
+    { fr: "Il y a du verglas.", de: "Es hat Glatteis." },
+    { fr: "Il pleut.", de: "Es regnet." },
+  ],
+  gelb: [
+    { fr: "faire", de: "machen" },
+    { fr: "Il fait mauvais temps.", de: "Es ist schlechtes Wetter." },
+    { fr: "Il fait beau temps.", de: "Es ist schönes Wetter." },
+    { fr: "Il fait chaud.", de: "Es ist heiss." },
+    { fr: "Il fait froid.", de: "Es ist kalt." },
+    { fr: "pleuvoir", de: "regnen" },
+    { fr: "Il pleut.", de: "Es regnet." },
+    { fr: "neiger", de: "schneien" },
+    { fr: "Il neige.", de: "Es schneit." },
+    { fr: "gêler", de: "gefrieren" },
+    { fr: "Il gèle.", de: "Es gefriert." },
+    { fr: "briller", de: "scheinen" },
+    { fr: "Le soleil brille.", de: "Die Sonne scheint." },
+    { fr: "souffler", de: "blasen / wehen" },
+    { fr: "Le vent souffle.", de: "Der Wind weht." },
+    { fr: "Qu'est-ce que c'est?", de: "Was ist das?" },
+  ],
+  gruen: [
+    { fr: "regarder", de: "schauen" },
+    { fr: "le bulletin météo", de: "der Wetterbericht" },
+    { fr: "Est-ce que …", de: "… (Anfang einer Frage)" },
+    { fr: "Est-ce que tu regardes le bulletin météo?", de: "Schaust du den Wetterbericht?" },
+    { fr: "partir", de: "weggehen" },
+    { fr: "Est-ce que tu pars?", de: "Gehst du weg?" },
+    { fr: "passer", de: "vorbeigehen" },
+    { fr: "Est-ce que tu passes par la gare?", de: "Gehst du am Bahnhof vorbei?" },
+    { fr: "arriver", de: "ankommen" },
+    { fr: "Est-ce que tu arrives à la gare?", de: "Kommst du am Bahnhof an?" },
+    { fr: "tomber", de: "fallen / stürzen" },
+    { fr: "Est-ce que tu es tombé?", de: "Bist du gestürzt?" },
+    { fr: "se lever", de: "aufstehen" },
+    { fr: "Est-ce que tu te lèves?", de: "Stehst du auf?" },
+    { fr: "commencer", de: "beginnen" },
+    { fr: "Est-ce que tu commences les devoirs?", de: "Beginnst du die Hausaufgaben?" },
+    { fr: "terminer", de: "beenden" },
+    { fr: "Est-ce que tu termines les devoirs?", de: "Beendest du die Hausaufgaben?" },
+    { fr: "D'accord.", de: "Einverstanden / Okay." },
+  ]
+};
+
+// ──────────────────────────────────────────
+// STATE
+// ──────────────────────────────────────────
+const state = {
+  rosa: { direction: 'fr-de', index: 0, score: 0, answered: false, shuffled: [] },
+  gelb: { direction: 'fr-de', index: 0, score: 0, answered: false, shuffled: [] },
+  gruen: { direction: 'fr-de', index: 0, score: 0, answered: false, shuffled: [] },
+};
+
+let currentTab = 'rosa';
+
+function shuffle(arr) {
+  return [...arr].sort(() => Math.random() - 0.5);
+}
+
+function getWrongOptions(list, correctEntry, direction, count = 3) {
+  const others = list.filter(e => e !== correctEntry);
+  const shuffled = shuffle(others).slice(0, count);
+  return shuffled.map(e => direction === 'fr-de' ? e.de : e.fr);
+}
+
+// ──────────────────────────────────────────
+// RENDER
+// ──────────────────────────────────────────
+function renderQuiz(tab) {
+  const s = state[tab];
+  const list = vocab[tab];
+  const area = document.getElementById(`quiz-area-${tab}`);
+
+  if (s.index >= s.shuffled.length) {
+    const pct = Math.round((s.score / s.shuffled.length) * 100);
+
+    let animHTML = '';
+    let msg = '';
+    let stars = '';
+
+    if (pct === 100) {
+      msg = '🏆 Perfekt! Du bist die Beste!';
+      stars = '⭐⭐⭐';
+      animHTML = '';
+      triggerConfetti();
+      soundFanfare();
+    } else if (pct >= 70) {
+      msg = '☀️ Sehr gut gemacht!';
+      stars = '⭐⭐';
+      animHTML = buildSun();
+      stopCanvas();
+      soundSunshine();
+    } else if (pct >= 40) {
+      msg = '🌈 Weiter so – du schaffst das!';
+      stars = '⭐';
+      animHTML = buildRainbow();
+      stopCanvas();
+      soundRainbow();
+    } else {
+      msg = '🌧️ Üb noch ein bisschen!';
+      stars = '';
+      animHTML = buildRain();
+      stopCanvas();
+      soundRain();
+    }
+
+    area.innerHTML = `
+      <div class="result-screen">
+        ${animHTML}
+        <div class="stars">${stars}</div>
+        <h2>${msg}</h2>
+        <div class="result-score">${s.score} / ${s.shuffled.length}</div>
+        <p>${pct}% richtig beantwortet</p>
+        <button class="restart-btn" onclick="restartQuiz('${tab}')">🔄 Nochmal versuchen</button>
+      </div>`;
+    return;
+  }
+
+  const entry = s.shuffled[s.index];
+  const question = s.direction === 'fr-de' ? entry.fr : entry.de;
+  const correct   = s.direction === 'fr-de' ? entry.de : entry.fr;
+  const qLang     = s.direction === 'fr-de' ? '🇫🇷 Französisch' : '🇩🇪 Deutsch';
+
+  const wrongPool = vocab[tab];
+  const wrongs = getWrongOptions(wrongPool, entry, s.direction, 3);
+  const options = shuffle([correct, ...wrongs]);
+
+  const progress = ((s.index) / s.shuffled.length) * 100;
+  const barColor = tab === 'rosa' ? '#ec4899' : tab === 'gelb' ? '#f59e0b' : '#16a34a';
+
+  area.innerHTML = `
+    <div class="progress-bar-wrap">
+      <div class="progress-bar-fill" style="width:${progress}%; background:${barColor};"></div>
+    </div>
+    <div class="progress-info">
+      <span>Frage ${s.index + 1} von ${s.shuffled.length}</span>
+      <span>✅ ${s.score} richtig</span>
+    </div>
+    <div class="card">
+      <div class="card-label">${qLang}</div>
+      <div class="card-word">${question}</div>
+      <div class="answers" id="answers-${tab}">
+        ${options.map((opt, i) => `
+          <button class="ans-btn" id="opt-${tab}-${i}" onclick="checkAnswer('${tab}', this, \`${opt}\`, \`${correct}\`)">
+            ${opt}
+          </button>`).join('')}
+      </div>
+      <div class="feedback" id="feedback-${tab}"></div>
+      <button class="next-btn hidden" id="next-${tab}" onclick="nextQuestion('${tab}')">
+        Weiter →
+      </button>
+    </div>`;
+}
+
+function checkAnswer(tab, btn, selected, correct) {
+  const s = state[tab];
+  if (s.answered) return;
+  s.answered = true;
+
+  const allBtns = document.querySelectorAll(`#answers-${tab} .ans-btn`);
+  allBtns.forEach(b => {
+    b.disabled = true;
+    if (b.textContent.trim() === correct) b.classList.add('correct');
+  });
+
+  const feedback = document.getElementById(`feedback-${tab}`);
+
+  if (selected === correct) {
+    btn.classList.add('correct');
+    s.score++;
+    feedback.textContent = '✅ Super!';
+    feedback.className = 'feedback correct';
+    soundCorrect();
+  } else {
+    btn.classList.add('wrong');
+    feedback.textContent = '❌ Nicht ganz – schau die richtige Antwort an!';
+    feedback.className = 'feedback wrong';
+    soundWrong();
+  }
+
+  document.getElementById(`next-${tab}`).classList.remove('hidden');
+}
+
+function nextQuestion(tab) {
+  state[tab].index++;
+  state[tab].answered = false;
+  renderQuiz(tab);
+}
+
+function restartQuiz(tab) {
+  stopCanvas();
+  state[tab].index = 0;
+  state[tab].score = 0;
+  state[tab].answered = false;
+  state[tab].shuffled = shuffle(vocab[tab]);
+  renderQuiz(tab);
+}
+
+// ──────────────────────────────────────────
+// TAB & DIRECTION
+// ──────────────────────────────────────────
+function selectTab(tab) {
+  currentTab = tab;
+  document.querySelectorAll('.quiz-container').forEach(el => el.classList.remove('visible'));
+  document.getElementById(`quiz-${tab}`).classList.add('visible');
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.querySelector(`.tab-btn.${tab}`).classList.add('active');
+}
+
+function setDirection(tab, dir) {
+  state[tab].direction = dir;
+  state[tab].index = 0;
+  state[tab].score = 0;
+  state[tab].answered = false;
+  state[tab].shuffled = shuffle(vocab[tab]);
+
+  const container = document.getElementById(`quiz-${tab}`);
+  const btns = container.querySelectorAll('.dir-btn');
+  btns.forEach(b => b.classList.remove('active'));
+  btns[dir === 'fr-de' ? 0 : 1].classList.add('active');
+
+  renderQuiz(tab);
+}
+
+// ──────────────────────────────────────────
+// ANIMATION BUILDERS
+// ──────────────────────────────────────────
+
+function buildSun() {
+  const rays = Array.from({length: 12}, (_, i) => {
+    const angle = (i / 12) * 360;
+    return `<div class="sun-ray" style="transform:rotate(${angle}deg) translateX(-50%);animation-delay:${i*0.05}s"></div>`;
+  }).join('');
+  return `<div class="sun-container">${rays}<div class="sun"></div></div>`;
+}
+
+function buildRainbow() {
+  const colors = [
+    {c:'#ef4444', size:200},
+    {c:'#f97316', size:174},
+    {c:'#eab308', size:148},
+    {c:'#22c55e', size:122},
+    {c:'#3b82f6', size:96},
+    {c:'#8b5cf6', size:70},
+  ];
+  const arcs = colors.map(({c, size}, i) => {
+    const offset = (200 - size) / 2;
+    return `<div class="rainbow-arc" style="
+      width:${size}px;height:${size}px;
+      border-color:${c} transparent transparent transparent;
+      left:${offset}px;
+      animation-delay:${i*0.08}s;
+    "></div>`;
+  }).join('');
+  return `<div class="rainbow-wrap">${arcs}</div>`;
+}
+
+function buildRain() {
+  const drops = Array.from({length: 18}, (_, i) => {
+    const left = Math.random() * 100;
+    const height = 10 + Math.random() * 14;
+    const dur = 0.7 + Math.random() * 0.8;
+    const delay = Math.random() * 1.5;
+    return `<div class="raindrop" style="
+      left:${left}%;height:${height}px;
+      animation-duration:${dur}s;
+      animation-delay:${delay}s;
+    "></div>`;
+  }).join('');
+
+  return `
+    <div style="text-align:center;margin-bottom:8px;">
+      <svg class="cloud-svg" width="100" height="55" viewBox="0 0 100 55" fill="none">
+        <ellipse cx="50" cy="38" rx="42" ry="18" fill="#d1d5db"/>
+        <ellipse cx="32" cy="32" rx="22" ry="18" fill="#e5e7eb"/>
+        <ellipse cx="62" cy="28" rx="26" ry="20" fill="#e5e7eb"/>
+        <ellipse cx="50" cy="36" rx="36" ry="16" fill="#f3f4f6"/>
+      </svg>
+    </div>
+    <div class="rain-wrap">${drops}</div>`;
+}
+
+// ──────────────────────────────────────────
+// CONFETTI ENGINE (canvas-based)
+// ──────────────────────────────────────────
+let confettiAnim = null;
+let confettiParticles = [];
+
+function stopCanvas() {
+  if (confettiAnim) { cancelAnimationFrame(confettiAnim); confettiAnim = null; }
+  confettiParticles = [];
+  const canvas = document.getElementById('anim-canvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+}
+
+function triggerConfetti() {
+  stopCanvas();
+  const canvas = document.getElementById('anim-canvas');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  const ctx = canvas.getContext('2d');
+
+  const colors = ['#ec4899','#f59e0b','#16a34a','#3b82f6','#8b5cf6','#f97316','#ef4444','#fde68a'];
+  const shapes = ['circle','rect','star'];
+
+  // Create burst of particles
+  for (let i = 0; i < 160; i++) {
+    confettiParticles.push({
+      x: Math.random() * canvas.width,
+      y: -20 - Math.random() * canvas.height * 0.5,
+      size: 6 + Math.random() * 10,
+      color: colors[Math.floor(Math.random() * colors.length)],
+      shape: shapes[Math.floor(Math.random() * shapes.length)],
+      vx: (Math.random() - 0.5) * 4,
+      vy: 2 + Math.random() * 4,
+      rot: Math.random() * Math.PI * 2,
+      rotV: (Math.random() - 0.5) * 0.2,
+      opacity: 1,
+      decay: 0.004 + Math.random() * 0.004,
+    });
+  }
+
+  function drawStar(ctx, x, y, r, rot) {
+    ctx.save();
+    ctx.translate(x, y);
+    ctx.rotate(rot);
+    ctx.beginPath();
+    for (let i = 0; i < 5; i++) {
+      const a = (i * 4 * Math.PI) / 5 - Math.PI / 2;
+      const b = (i * 4 * Math.PI) / 5 + (2 * Math.PI) / 5 - Math.PI / 2;
+      if (i === 0) ctx.moveTo(Math.cos(a) * r, Math.sin(a) * r);
+      else ctx.lineTo(Math.cos(a) * r, Math.sin(a) * r);
+      ctx.lineTo(Math.cos(b) * r * 0.4, Math.sin(b) * r * 0.4);
+    }
+    ctx.closePath();
+    ctx.restore();
+  }
+
+  function loop() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    confettiParticles = confettiParticles.filter(p => p.opacity > 0.05);
+
+    confettiParticles.forEach(p => {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.vy += 0.05; // gravity
+      p.rot += p.rotV;
+      p.opacity -= p.decay;
+
+      ctx.globalAlpha = Math.max(0, p.opacity);
+      ctx.fillStyle = p.color;
+
+      if (p.shape === 'circle') {
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.size / 2, 0, Math.PI * 2);
+        ctx.fill();
+      } else if (p.shape === 'rect') {
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rot);
+        ctx.fillRect(-p.size / 2, -p.size / 4, p.size, p.size / 2);
+        ctx.restore();
+      } else {
+        drawStar(ctx, p.x, p.y, p.size / 2, p.rot);
+        ctx.fill();
+      }
+    });
+
+    ctx.globalAlpha = 1;
+
+    if (confettiParticles.length > 0) {
+      confettiAnim = requestAnimationFrame(loop);
+    } else {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+  }
+
+  confettiAnim = requestAnimationFrame(loop);
+
+  // Second wave after 800ms
+  setTimeout(() => {
+    for (let i = 0; i < 80; i++) {
+      confettiParticles.push({
+        x: Math.random() * canvas.width,
+        y: -10,
+        size: 6 + Math.random() * 8,
+        color: colors[Math.floor(Math.random() * colors.length)],
+        shape: shapes[Math.floor(Math.random() * shapes.length)],
+        vx: (Math.random() - 0.5) * 5,
+        vy: 1 + Math.random() * 3,
+        rot: Math.random() * Math.PI * 2,
+        rotV: (Math.random() - 0.5) * 0.25,
+        opacity: 1,
+        decay: 0.003 + Math.random() * 0.004,
+      });
+    }
+  }, 800);
+}
+
+// ──────────────────────────────────────────
+// SOUNDS (Web Audio API)
+// ──────────────────────────────────────────
+let audioCtx = null;
+
+function getAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playTone(freq, type, duration, gainVal, delay = 0) {
+  try {
+    const ctx = getAudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+    osc.type = type;
+    osc.frequency.setValueAtTime(freq, ctx.currentTime + delay);
+    gain.gain.setValueAtTime(0, ctx.currentTime + delay);
+    gain.gain.linearRampToValueAtTime(gainVal, ctx.currentTime + delay + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + delay + duration);
+    osc.start(ctx.currentTime + delay);
+    osc.stop(ctx.currentTime + delay + duration);
+  } catch(e) {}
+}
+
+function soundCorrect() {
+  playTone(523, 'sine', 0.15, 0.3, 0);
+  playTone(784, 'sine', 0.2,  0.3, 0.12);
+}
+
+function soundWrong() {
+  playTone(220, 'sawtooth', 0.18, 0.15, 0);
+  playTone(180, 'sawtooth', 0.18, 0.10, 0.08);
+}
+
+function soundFanfare() {
+  [523, 659, 784, 1047].forEach((f, i) => playTone(f, 'sine', 0.25, 0.28, i * 0.13));
+}
+
+function soundSunshine() {
+  [440, 554, 659, 880].forEach((f, i) => playTone(f, 'sine', 0.2, 0.22, i * 0.1));
+}
+
+function soundRainbow() {
+  [349, 440, 523].forEach((f, i) => playTone(f, 'triangle', 0.3, 0.18, i * 0.08));
+}
+
+function soundRain() {
+  playTone(330, 'triangle', 0.2, 0.15, 0);
+  playTone(392, 'triangle', 0.2, 0.15, 0.2);
+  playTone(330, 'triangle', 0.2, 0.15, 0.4);
+}
+
+// ──────────────────────────────────────────
+// INIT
+// ──────────────────────────────────────────
+['rosa', 'gelb', 'gruen'].forEach(tab => {
+  state[tab].shuffled = shuffle(vocab[tab]);
+  renderQuiz(tab);
+});
+</script>
+</body>
+</html>

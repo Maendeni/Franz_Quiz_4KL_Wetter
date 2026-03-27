@@ -435,6 +435,105 @@
     0%, 100% { transform: translateY(0); }
     50%       { transform: translateY(-6px); }
   }
+
+  /* AUTO-READ TOGGLE */
+  .autoread-bar {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 16px;
+  }
+
+  .autoread-label {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #6b7280;
+  }
+
+  .toggle-wrap {
+    position: relative;
+    width: 46px;
+    height: 26px;
+    cursor: pointer;
+  }
+
+  .toggle-wrap input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+    position: absolute;
+  }
+
+  .toggle-slider {
+    position: absolute;
+    inset: 0;
+    background: #d1d5db;
+    border-radius: 50px;
+    transition: background 0.25s;
+  }
+
+  .toggle-slider::before {
+    content: '';
+    position: absolute;
+    width: 20px; height: 20px;
+    left: 3px; top: 3px;
+    background: white;
+    border-radius: 50%;
+    transition: transform 0.25s;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+  }
+
+  .toggle-wrap input:checked + .toggle-slider {
+    background: #ec4899;
+  }
+
+  .toggle-wrap input:checked + .toggle-slider::before {
+    transform: translateX(20px);
+  }
+
+  /* SPEAK BUTTON */
+  .card-word-wrap {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 30px;
+  }
+
+  .speak-btn {
+    background: none;
+    border: 2px solid #e5e7eb;
+    border-radius: 50%;
+    width: 38px; height: 38px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.15s;
+    flex-shrink: 0;
+    color: #9ca3af;
+  }
+
+  .speak-btn:hover {
+    border-color: var(--card-color, #ec4899);
+    background: var(--card-light, #fce7f3);
+    color: var(--card-color, #ec4899);
+    transform: scale(1.1);
+  }
+
+  .speak-btn.speaking {
+    border-color: var(--card-color, #ec4899);
+    background: var(--card-light, #fce7f3);
+    color: var(--card-color, #ec4899);
+    animation: speakPulse 0.6s ease-in-out infinite alternate;
+  }
+
+  @keyframes speakPulse {
+    from { transform: scale(1); }
+    to   { transform: scale(1.15); }
+  }
 </style>
 </head>
 <body>
@@ -450,6 +549,15 @@
   <button class="tab-btn rosa active" onclick="selectTab('rosa')">🌸 Liste 8 – Rosa</button>
   <button class="tab-btn gelb" onclick="selectTab('gelb')">🌟 Liste 9 – Gelb</button>
   <button class="tab-btn gruen" onclick="selectTab('gruen')">🌿 Liste 10 – Grün</button>
+</div>
+
+<!-- AUTO-READ TOGGLE -->
+<div class="autoread-bar">
+  <span class="autoread-label">🔊 Automatisch vorlesen</span>
+  <label class="toggle-wrap">
+    <input type="checkbox" id="autoread-toggle" checked onchange="autoRead = this.checked">
+    <span class="toggle-slider"></span>
+  </label>
 </div>
 
 <!-- QUIZ SECTIONS -->
@@ -555,6 +663,38 @@ const state = {
 };
 
 let currentTab = 'rosa';
+let autoRead = true;
+
+// ──────────────────────────────────────────
+// SPEECH
+// ──────────────────────────────────────────
+function speak(text, lang) {
+  if (!window.speechSynthesis) return;
+  window.speechSynthesis.cancel();
+  const utt = new SpeechSynthesisUtterance(text);
+  utt.lang = lang;
+  utt.rate = 0.88;
+  utt.pitch = 1.05;
+
+  // Animate the button while speaking
+  const btn = document.getElementById('speak-btn-active');
+  if (btn) {
+    btn.classList.add('speaking');
+    utt.onend = () => { if (btn) btn.classList.remove('speaking'); };
+    utt.onerror = () => { if (btn) btn.classList.remove('speaking'); };
+  }
+  window.speechSynthesis.speak(utt);
+}
+
+function speakQuestion(tab) {
+  const s = state[tab];
+  if (!s.shuffled.length) return;
+  const entry = s.shuffled[s.index];
+  if (!entry) return;
+  const text = s.direction === 'fr-de' ? entry.fr : entry.de;
+  const lang = s.direction === 'fr-de' ? 'fr-FR' : 'de-DE';
+  speak(text, lang);
+}
 
 function shuffle(arr) {
   return [...arr].sort(() => Math.random() - 0.5);
@@ -641,7 +781,10 @@ function renderQuiz(tab) {
     </div>
     <div class="card">
       <div class="card-label">${qLang}</div>
-      <div class="card-word">${question}</div>
+      <div class="card-word-wrap">
+        <div class="card-word" style="margin-bottom:0">${question}</div>
+        <button class="speak-btn" id="speak-btn-active" onclick="speakQuestion('${tab}')" title="Vorlesen">🔊</button>
+      </div>
       <div class="answers" id="answers-${tab}">
         ${options.map((opt, i) => `
           <button class="ans-btn" id="opt-${tab}-${i}" onclick="checkAnswer('${tab}', this, \`${opt}\`, \`${correct}\`)">
@@ -653,6 +796,11 @@ function renderQuiz(tab) {
         Weiter →
       </button>
     </div>`;
+
+  // Auto-read if enabled
+  if (autoRead) {
+    setTimeout(() => speakQuestion(tab), 300);
+  }
 }
 
 function checkAnswer(tab, btn, selected, correct) {
@@ -703,6 +851,7 @@ function restartQuiz(tab) {
 // TAB & DIRECTION
 // ──────────────────────────────────────────
 function selectTab(tab) {
+  window.speechSynthesis && window.speechSynthesis.cancel();
   currentTab = tab;
   document.querySelectorAll('.quiz-container').forEach(el => el.classList.remove('visible'));
   document.getElementById(`quiz-${tab}`).classList.add('visible');
@@ -711,6 +860,7 @@ function selectTab(tab) {
 }
 
 function setDirection(tab, dir) {
+  window.speechSynthesis && window.speechSynthesis.cancel();
   state[tab].direction = dir;
   state[tab].index = 0;
   state[tab].score = 0;

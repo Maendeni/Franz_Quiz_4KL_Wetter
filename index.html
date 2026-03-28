@@ -254,25 +254,52 @@
   .feedback.correct { color: #16a34a; }
   .feedback.wrong   { color: #ef4444; }
 
-  /* NEXT BUTTON */
+  /* NEXT BUTTON with countdown ring */
+  .next-btn-wrap {
+    display: flex;
+    justify-content: center;
+    margin: 16px auto 0;
+  }
+
   .next-btn {
-    display: block;
-    margin: 18px auto 0;
-    padding: 12px 36px;
+    position: relative;
+    padding: 11px 28px;
     border-radius: 50px;
     border: none;
     background: var(--card-color, #ec4899);
     color: white;
     font-family: 'Nunito', sans-serif;
-    font-size: 1rem;
+    font-size: 0.95rem;
     font-weight: 800;
     cursor: pointer;
-    transition: all 0.2s;
+    transition: transform 0.2s, box-shadow 0.2s;
     box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    overflow: hidden;
   }
   .next-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 18px rgba(0,0,0,0.2); }
   .next-btn:active { transform: translateY(0); }
   .next-btn.hidden { display: none; }
+
+  /* Shrinking fill overlay inside button */
+  .next-btn .countdown-fill {
+    position: absolute;
+    top: 0; right: 0;
+    height: 100%;
+    width: 100%;
+    background: rgba(255,255,255,0.25);
+    transform-origin: right center;
+    border-radius: 50px;
+    animation: none;
+  }
+  .next-btn.counting .countdown-fill {
+    animation: drainLeft var(--countdown-dur, 2s) linear forwards;
+  }
+  @keyframes drainLeft {
+    from { transform: scaleX(1); }
+    to   { transform: scaleX(0); }
+  }
+
+  .next-btn span { position: relative; z-index: 1; }
 
   /* RESULT SCREEN */
   .result-screen {
@@ -803,9 +830,12 @@ function renderQuiz(tab) {
           </button>`).join('')}
       </div>
       <div class="feedback" id="feedback-${tab}"></div>
-      <button class="next-btn hidden" id="next-${tab}" onclick="nextQuestion('${tab}')">
-        Weiter →
-      </button>
+      <div class="next-btn-wrap">
+        <button class="next-btn hidden" id="next-${tab}" onclick="nextQuestion('${tab}')">
+          <div class="countdown-fill"></div>
+          <span>Weiter →</span>
+        </button>
+      </div>
     </div>`;
 
   // Auto-read if enabled
@@ -814,10 +844,35 @@ function renderQuiz(tab) {
   }
 }
 
+// ──────────────────────────────────────────
+// FEEDBACK MESSAGES
+// ──────────────────────────────────────────
+const feedbackCorrect = [
+  '✅ Super!', '🌟 Fantastisch!', '🎉 Bravo!', '💪 Klasse!',
+  '🥳 Toll gemacht!', '🌈 Wunderbar!', '🔥 Genial!', '👏 Prima!',
+  '⭐ Ausgezeichnet!', '🚀 Weiter so!', '💫 Magnifique!', '🎊 Parfait!',
+];
+const feedbackWrong = [
+  '❌ Nicht ganz – schau die Antwort an!',
+  '😅 Fast! Merke dir die richtige Antwort.',
+  '🤔 Noch nicht – aber du lernst es!',
+  '💡 Schau genau hin – du schaffst das!',
+  '🌧️ Nächstes Mal klappt es!',
+];
+
+function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+let autoAdvanceTimer = null;
+
+function clearAutoAdvance() {
+  if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+}
+
 function checkAnswer(tab, btn, selected, correct) {
   const s = state[tab];
   if (s.answered) return;
   s.answered = true;
+  clearAutoAdvance();
 
   const allBtns = document.querySelectorAll(`#answers-${tab} .ans-btn`);
   allBtns.forEach(b => {
@@ -826,30 +881,43 @@ function checkAnswer(tab, btn, selected, correct) {
   });
 
   const feedback = document.getElementById(`feedback-${tab}`);
+  const nextBtn  = document.getElementById(`next-${tab}`);
 
   if (selected === correct) {
     btn.classList.add('correct');
     s.score++;
-    feedback.textContent = '✅ Super!';
+    feedback.textContent = pickRandom(feedbackCorrect);
     feedback.className = 'feedback correct';
     soundCorrect();
   } else {
     btn.classList.add('wrong');
-    feedback.textContent = '❌ Nicht ganz – schau die richtige Antwort an!';
+    feedback.textContent = pickRandom(feedbackWrong);
     feedback.className = 'feedback wrong';
     soundWrong();
   }
 
-  document.getElementById(`next-${tab}`).classList.remove('hidden');
+  // Show button with countdown animation
+  const delay = selected === correct ? 2400 : 6000;
+  nextBtn.classList.remove('hidden');
+  nextBtn.style.setProperty('--countdown-dur', (delay / 1000) + 's');
+  // trigger reflow so animation restarts cleanly
+  void nextBtn.offsetWidth;
+  nextBtn.classList.add('counting');
+
+  autoAdvanceTimer = setTimeout(() => {
+    nextQuestion(tab);
+  }, delay);
 }
 
 function nextQuestion(tab) {
+  clearAutoAdvance();
   state[tab].index++;
   state[tab].answered = false;
   renderQuiz(tab);
 }
 
 function restartQuiz(tab) {
+  clearAutoAdvance();
   stopCanvas();
   state[tab].index = 0;
   state[tab].score = 0;

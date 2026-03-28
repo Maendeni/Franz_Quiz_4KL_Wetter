@@ -37,12 +37,12 @@
 
   header {
     text-align: center;
-    padding: 30px 20px 10px;
+    padding: 14px 20px 4px;
   }
 
   header h1 {
     font-family: 'Baloo 2', cursive;
-    font-size: 2.4rem;
+    font-size: 1.5rem;
     font-weight: 800;
     background: linear-gradient(135deg, #ec4899, #f59e0b, #16a34a);
     -webkit-background-clip: text;
@@ -51,33 +51,48 @@
     letter-spacing: -0.5px;
   }
 
-  header p {
-    color: #9ca3af;
-    font-size: 1rem;
-    margin-top: 4px;
-    font-weight: 600;
+  /* COMPACT CONTROL BAR */
+  .control-bar {
+    max-width: 580px;
+    margin: 0 auto 10px;
+    padding: 0 12px;
   }
 
-  /* TAB NAV */
-  .tabs {
+  .ctrl-row {
     display: flex;
+    align-items: center;
     justify-content: center;
-    gap: 10px;
-    padding: 20px;
+    gap: 6px;
+    background: white;
+    border-radius: 50px;
+    padding: 6px 10px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.09);
     flex-wrap: wrap;
   }
 
-  .tab-btn {
-    padding: 10px 22px;
-    border-radius: 50px;
-    border: 3px solid transparent;
-    font-family: 'Nunito', sans-serif;
+  .ctrl-divider {
+    width: 1px;
+    height: 22px;
+    background: #e5e7eb;
+    margin: 0 2px;
+  }
+
+  .autoread-icon {
     font-size: 0.95rem;
+    line-height: 1;
+  }
+
+  /* TAB NAV */
+  .tab-btn {
+    padding: 6px 13px;
+    border-radius: 50px;
+    border: 2.5px solid transparent;
+    font-family: 'Nunito', sans-serif;
+    font-size: 0.85rem;
     font-weight: 800;
     cursor: pointer;
     transition: all 0.2s ease;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    background: transparent;
   }
 
   .tab-btn.rosa { border-color: var(--rosa-dark); color: var(--rosa-dark); }
@@ -90,32 +105,29 @@
   /* DIRECTION TOGGLE */
   .direction-toggle {
     display: flex;
-    justify-content: center;
-    gap: 0;
-    margin: 0 auto 24px;
-    width: fit-content;
     border-radius: 50px;
     overflow: hidden;
-    border: 2.5px solid #e5e7eb;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    border: 2px solid #e5e7eb;
+    background: #f9fafb;
   }
 
   .dir-btn {
-    padding: 9px 20px;
+    padding: 5px 10px;
     border: none;
     font-family: 'Nunito', sans-serif;
-    font-size: 0.88rem;
+    font-size: 0.78rem;
     font-weight: 700;
     cursor: pointer;
-    background: white;
+    background: transparent;
     color: #6b7280;
     transition: all 0.2s;
+    white-space: nowrap;
   }
 
   .dir-btn.active {
     background: var(--active-color, #ec4899);
     color: white;
+    border-radius: 50px;
   }
 
   /* QUIZ AREA */
@@ -542,46 +554,45 @@
 
 <header>
   <h1>🇫🇷 Französisch Üben</h1>
-  <p>Mille feuilles 4 · C'est le monde !</p>
 </header>
 
-<div class="tabs">
-  <button class="tab-btn rosa active" onclick="selectTab('rosa')">🌸 Liste 8 – Rosa</button>
-  <button class="tab-btn gelb" onclick="selectTab('gelb')">🌟 Liste 9 – Gelb</button>
-  <button class="tab-btn gruen" onclick="selectTab('gruen')">🌿 Liste 10 – Grün</button>
-</div>
+<!-- COMPACT CONTROL BAR -->
+<div class="control-bar">
+  <!-- List tabs -->
+  <div class="ctrl-row">
+    <button class="tab-btn rosa active" onclick="selectTab('rosa')">🌸 8</button>
+    <button class="tab-btn gelb" onclick="selectTab('gelb')">🌟 9</button>
+    <button class="tab-btn gruen" onclick="selectTab('gruen')">🌿 10</button>
 
-<!-- AUTO-READ TOGGLE -->
-<div class="autoread-bar">
-  <span class="autoread-label">🔊 Automatisch vorlesen</span>
-  <label class="toggle-wrap">
-    <input type="checkbox" id="autoread-toggle" checked onchange="autoRead = this.checked">
-    <span class="toggle-slider"></span>
-  </label>
+    <div class="ctrl-divider"></div>
+
+    <!-- Direction toggle (shared, updates per tab) -->
+    <div class="direction-toggle" id="global-dir-toggle">
+      <button class="dir-btn active" id="dir-fr-de" onclick="setGlobalDirection('fr-de')">🇫🇷→🇩🇪</button>
+      <button class="dir-btn" id="dir-de-fr" onclick="setGlobalDirection('de-fr')">🇩🇪→🇫🇷</button>
+    </div>
+
+    <div class="ctrl-divider"></div>
+
+    <!-- Autoread toggle -->
+    <label class="toggle-wrap" title="Automatisch vorlesen">
+      <input type="checkbox" id="autoread-toggle" checked onchange="autoRead = this.checked">
+      <span class="toggle-slider"></span>
+    </label>
+    <span class="autoread-icon">🔊</span>
+  </div>
 </div>
 
 <!-- QUIZ SECTIONS -->
 <div id="quiz-rosa" class="quiz-container visible" style="--card-color:#ec4899; --card-light:#fce7f3; --active-color:#ec4899;">
-  <div class="direction-toggle">
-    <button class="dir-btn active" onclick="setDirection('rosa','fr-de')">🇫🇷 → 🇩🇪</button>
-    <button class="dir-btn" onclick="setDirection('rosa','de-fr')">🇩🇪 → 🇫🇷</button>
-  </div>
   <div id="quiz-area-rosa"></div>
 </div>
 
 <div id="quiz-gelb" class="quiz-container" style="--card-color:#f59e0b; --card-light:#fefce8; --active-color:#f59e0b;">
-  <div class="direction-toggle">
-    <button class="dir-btn active" onclick="setDirection('gelb','fr-de')">🇫🇷 → 🇩🇪</button>
-    <button class="dir-btn" onclick="setDirection('gelb','de-fr')">🇩🇪 → 🇫🇷</button>
-  </div>
   <div id="quiz-area-gelb"></div>
 </div>
 
 <div id="quiz-gruen" class="quiz-container" style="--card-color:#16a34a; --card-light:#f0fdf4; --active-color:#16a34a;">
-  <div class="direction-toggle">
-    <button class="dir-btn active" onclick="setDirection('gruen','fr-de')">🇫🇷 → 🇩🇪</button>
-    <button class="dir-btn" onclick="setDirection('gruen','de-fr')">🇩🇪 → 🇫🇷</button>
-  </div>
   <div id="quiz-area-gruen"></div>
 </div>
 
@@ -857,22 +868,29 @@ function selectTab(tab) {
   document.getElementById(`quiz-${tab}`).classList.add('visible');
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.querySelector(`.tab-btn.${tab}`).classList.add('active');
+
+  // Sync direction toggle to match this tab's current direction
+  const dir = state[tab].direction;
+  document.getElementById('dir-fr-de').classList.toggle('active', dir === 'fr-de');
+  document.getElementById('dir-de-fr').classList.toggle('active', dir === 'de-fr');
+
+  // Sync active color for direction toggle
+  const colors = { rosa: '#ec4899', gelb: '#f59e0b', gruen: '#16a34a' };
+  document.getElementById('global-dir-toggle').style.setProperty('--active-color', colors[tab]);
 }
 
-function setDirection(tab, dir) {
+function setGlobalDirection(dir) {
   window.speechSynthesis && window.speechSynthesis.cancel();
-  state[tab].direction = dir;
-  state[tab].index = 0;
-  state[tab].score = 0;
-  state[tab].answered = false;
-  state[tab].shuffled = shuffle(vocab[tab]);
+  state[currentTab].direction = dir;
+  state[currentTab].index = 0;
+  state[currentTab].score = 0;
+  state[currentTab].answered = false;
+  state[currentTab].shuffled = shuffle(vocab[currentTab]);
 
-  const container = document.getElementById(`quiz-${tab}`);
-  const btns = container.querySelectorAll('.dir-btn');
-  btns.forEach(b => b.classList.remove('active'));
-  btns[dir === 'fr-de' ? 0 : 1].classList.add('active');
+  document.getElementById('dir-fr-de').classList.toggle('active', dir === 'fr-de');
+  document.getElementById('dir-de-fr').classList.toggle('active', dir === 'de-fr');
 
-  renderQuiz(tab);
+  renderQuiz(currentTab);
 }
 
 // ──────────────────────────────────────────

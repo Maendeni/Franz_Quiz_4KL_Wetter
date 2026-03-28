@@ -825,7 +825,7 @@ function renderQuiz(tab) {
       </div>
       <div class="answers" id="answers-${tab}">
         ${options.map((opt, i) => `
-          <button class="ans-btn" id="opt-${tab}-${i}" onclick="checkAnswer('${tab}', this, \`${opt}\`, \`${correct}\`)">
+          <button class="ans-btn" id="opt-${tab}-${s.index}-${i}" onclick="checkAnswer('${tab}', this, \`${opt}\`, \`${correct}\`)">
             ${opt}
           </button>`).join('')}
       </div>
@@ -897,7 +897,7 @@ function checkAnswer(tab, btn, selected, correct) {
   }
 
   // Show button with countdown animation
-  const delay = selected === correct ? 2400 : 6000;
+  const delay = selected === correct ? 2500 : 6000;
   nextBtn.classList.remove('hidden');
   nextBtn.style.setProperty('--countdown-dur', (delay / 1000) + 's');
   // trigger reflow so animation restarts cleanly

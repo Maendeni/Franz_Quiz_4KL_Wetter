@@ -809,6 +809,9 @@ function renderQuiz(tab) {
   const progress = ((s.index) / s.shuffled.length) * 100;
   const barColor = tab === 'rosa' ? '#ec4899' : tab === 'gelb' ? '#f59e0b' : '#16a34a';
 
+  // Force full DOM teardown so no button states carry over
+  area.innerHTML = '';
+
   area.innerHTML = `
     <div class="progress-bar-wrap">
       <div class="progress-bar-fill" style="width:${progress}%; background:${barColor};"></div>
@@ -823,12 +826,7 @@ function renderQuiz(tab) {
         <div class="card-word" style="margin-bottom:0">${question}</div>
         <button class="speak-btn" id="speak-btn-active" onclick="speakQuestion('${tab}')" title="Vorlesen">🔊</button>
       </div>
-      <div class="answers" id="answers-${tab}">
-        ${options.map((opt, i) => `
-          <button class="ans-btn" id="opt-${tab}-${s.index}-${i}" onclick="checkAnswer('${tab}', this, \`${opt}\`, \`${correct}\`)">
-            ${opt}
-          </button>`).join('')}
-      </div>
+      <div class="answers" id="answers-${tab}"></div>
       <div class="feedback" id="feedback-${tab}"></div>
       <div class="next-btn-wrap">
         <button class="next-btn hidden" id="next-${tab}" onclick="nextQuestion('${tab}')">
@@ -837,6 +835,16 @@ function renderQuiz(tab) {
         </button>
       </div>
     </div>`;
+
+  // Build answer buttons via DOM (never reuses nodes → no style carry-over)
+  const answersDiv = document.getElementById(`answers-${tab}`);
+  options.forEach(opt => {
+    const b = document.createElement('button');
+    b.className = 'ans-btn';
+    b.textContent = opt;
+    b.addEventListener('click', () => checkAnswer(tab, b, opt, correct));
+    answersDiv.appendChild(b);
+  });
 
   // Auto-read if enabled
   if (autoRead) {
@@ -911,6 +919,11 @@ function checkAnswer(tab, btn, selected, correct) {
 
 function nextQuestion(tab) {
   clearAutoAdvance();
+  // Explicitly reset all answer button styles before re-render
+  document.querySelectorAll(`#answers-${tab} .ans-btn`).forEach(b => {
+    b.classList.remove('correct', 'wrong');
+    b.disabled = false;
+  });
   state[tab].index++;
   state[tab].answered = false;
   renderQuiz(tab);

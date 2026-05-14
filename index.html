@@ -838,13 +838,17 @@ function renderQuiz(tab) {
 
   // Build answer buttons via DOM (never reuses nodes → no style carry-over)
   const answersDiv = document.getElementById(`answers-${tab}`);
+  const fragment = document.createDocumentFragment();
   options.forEach(opt => {
     const b = document.createElement('button');
     b.className = 'ans-btn';
     b.textContent = opt;
     b.addEventListener('click', () => checkAnswer(tab, b, opt, correct));
-    answersDiv.appendChild(b);
+    fragment.appendChild(b);
   });
+  answersDiv.style.pointerEvents = 'none';
+  answersDiv.appendChild(fragment);
+  setTimeout(() => { answersDiv.style.pointerEvents = ''; }, 350);
 
   // Auto-read if enabled
   if (autoRead) {
@@ -871,9 +875,11 @@ const feedbackWrong = [
 function pickRandom(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 let autoAdvanceTimer = null;
+let speakAnswerTimer = null;
 
 function clearAutoAdvance() {
   if (autoAdvanceTimer) { clearTimeout(autoAdvanceTimer); autoAdvanceTimer = null; }
+  if (speakAnswerTimer) { clearTimeout(speakAnswerTimer); speakAnswerTimer = null; }
 }
 
 function checkAnswer(tab, btn, selected, correct) {
@@ -897,6 +903,10 @@ function checkAnswer(tab, btn, selected, correct) {
     feedback.textContent = pickRandom(feedbackCorrect);
     feedback.className = 'feedback correct';
     soundCorrect();
+    if (autoRead) {
+      const ansLang = s.direction === 'fr-de' ? 'de-DE' : 'fr-FR';
+      speakAnswerTimer = setTimeout(() => speak(correct, ansLang), 600);
+    }
   } else {
     btn.classList.add('wrong');
     feedback.textContent = pickRandom(feedbackWrong);

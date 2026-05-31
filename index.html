@@ -101,6 +101,8 @@
   .tab-btn.gelb.active { background: var(--gelb-dark); color: white; }
   .tab-btn.gruen { border-color: var(--gruen-dark); color: var(--gruen-dark); }
   .tab-btn.gruen.active { background: var(--gruen-dark); color: white; }
+  .tab-btn.blau { border-color: #7c3aed; color: #7c3aed; }
+  .tab-btn.blau.active { background: #7c3aed; color: white; }
 
   /* DIRECTION TOGGLE */
   .direction-toggle {
@@ -590,6 +592,7 @@
     <button class="tab-btn rosa active" onclick="selectTab('rosa')">🌸 8</button>
     <button class="tab-btn gelb" onclick="selectTab('gelb')">🌟 9</button>
     <button class="tab-btn gruen" onclick="selectTab('gruen')">🌿 10</button>
+    <button class="tab-btn blau" onclick="selectTab('blau')">💜 Konj.</button>
 
     <div class="ctrl-divider"></div>
 
@@ -621,6 +624,10 @@
 
 <div id="quiz-gruen" class="quiz-container" style="--card-color:#16a34a; --card-light:#f0fdf4; --active-color:#16a34a;">
   <div id="quiz-area-gruen"></div>
+</div>
+
+<div id="quiz-blau" class="quiz-container" style="--card-color:#7c3aed; --card-light:#ede9fe; --active-color:#7c3aed;">
+  <div id="quiz-area-blau"></div>
 </div>
 
 <script>
@@ -694,10 +701,54 @@ const vocab = {
 // ──────────────────────────────────────────
 // STATE
 // ──────────────────────────────────────────
+// Build conjugation entries for all -er verbs
+(function() {
+  const verbs = [
+    { inf: 'regarder',  stem: 'regard' },
+    { inf: 'passer',    stem: 'pass' },
+    { inf: 'arriver',   stem: 'arriv' },
+    { inf: 'commencer', stem: 'commenc', stemNous: 'commenç' },
+    { inf: 'terminer',  stem: 'termin' },
+    { inf: 'briller',   stem: 'brill' },
+    { inf: 'souffler',  stem: 'souffl' },
+    { inf: 'tomber',    stem: 'tomb' },
+  ];
+  const persons = [
+    { pronoun: 'je',        speakP: 'je',   ending: 'e',   idx: 0 },
+    { pronoun: 'tu',        speakP: 'tu',   ending: 'es',  idx: 1 },
+    { pronoun: 'il/elle',   speakP: 'il',   ending: 'e',   idx: 2 },
+    { pronoun: 'nous',      speakP: 'nous', ending: 'ons', idx: 3 },
+    { pronoun: 'vous',      speakP: 'vous', ending: 'ez',  idx: 4 },
+    { pronoun: 'ils/elles', speakP: 'ils',  ending: 'ent', idx: 5 },
+  ];
+  vocab.blau = [];
+  for (const verb of verbs) {
+    const forms = persons.map(p => {
+      const s = (p.idx === 3 && verb.stemNous) ? verb.stemNous : verb.stem;
+      return s + p.ending;
+    });
+    for (let i = 0; i < persons.length; i++) {
+      const form = forms[i];
+      let sp = persons[i].speakP;
+      // Elision: je + Vokal → j'
+      const speak = (sp === 'je' && /^[aeiouéè]/i.test(form)) ? `j'${form}` : `${sp} ${form}`;
+      // Eindeutige falsche Optionen: keine Duplikate, nie gleich der richtigen Form
+      const wrongOptions = [...new Set(forms.filter(f => f !== form))];
+      vocab.blau.push({
+        fr: `${persons[i].pronoun} (${verb.inf})`,
+        de: form,
+        wrongOptions,
+        speak,
+      });
+    }
+  }
+})();
+
 const state = {
   rosa: { direction: 'fr-de', index: 0, score: 0, answered: false, shuffled: [] },
   gelb: { direction: 'fr-de', index: 0, score: 0, answered: false, shuffled: [] },
   gruen: { direction: 'fr-de', index: 0, score: 0, answered: false, shuffled: [] },
+  blau: { direction: 'fr-de', index: 0, score: 0, answered: false, shuffled: [] },
 };
 
 let currentTab = 'rosa';
@@ -800,14 +851,17 @@ function renderQuiz(tab) {
   const entry = s.shuffled[s.index];
   const question = s.direction === 'fr-de' ? entry.fr : entry.de;
   const correct   = s.direction === 'fr-de' ? entry.de : entry.fr;
-  const qLang     = s.direction === 'fr-de' ? '🇫🇷 Französisch' : '🇩🇪 Deutsch';
+  const isConj    = tab === 'blau';
+  const qLang     = isConj ? '💜 Konjugieren' : (s.direction === 'fr-de' ? '🇫🇷 Französisch' : '🇩🇪 Deutsch');
 
   const wrongPool = vocab[tab];
-  const wrongs = getWrongOptions(wrongPool, entry, s.direction, 3);
+  const wrongs = entry.wrongOptions
+    ? shuffle(entry.wrongOptions).slice(0, 3)
+    : getWrongOptions(wrongPool, entry, s.direction, 3);
   const options = shuffle([correct, ...wrongs]);
 
   const progress = ((s.index) / s.shuffled.length) * 100;
-  const barColor = tab === 'rosa' ? '#ec4899' : tab === 'gelb' ? '#f59e0b' : '#16a34a';
+  const barColor = tab === 'rosa' ? '#ec4899' : tab === 'gelb' ? '#f59e0b' : tab === 'gruen' ? '#16a34a' : '#7c3aed';
 
   // Force full DOM teardown so no button states carry over
   area.innerHTML = '';
@@ -824,7 +878,7 @@ function renderQuiz(tab) {
       <div class="card-label">${qLang}</div>
       <div class="card-word-wrap">
         <div class="card-word" style="margin-bottom:0">${question}</div>
-        <button class="speak-btn" id="speak-btn-active" onclick="speakQuestion('${tab}')" title="Vorlesen">🔊</button>
+        ${isConj ? '' : `<button class="speak-btn" id="speak-btn-active" onclick="speakQuestion('${tab}')" title="Vorlesen">🔊</button>`}
       </div>
       <div class="answers" id="answers-${tab}"></div>
       <div class="feedback" id="feedback-${tab}"></div>
@@ -846,8 +900,8 @@ function renderQuiz(tab) {
     answersDiv.appendChild(b);
   });
 
-  // Auto-read if enabled
-  if (autoRead) {
+  // Auto-read if enabled (not for conjugation tab – we read the correct form after answering)
+  if (autoRead && !isConj) {
     setTimeout(() => speakQuestion(tab), 300);
   }
 }
@@ -904,6 +958,14 @@ function checkAnswer(tab, btn, selected, correct) {
     soundWrong();
   }
 
+  // Conjugation tab: read the correct form aloud (e.g. "nous regardons")
+  if (autoRead) {
+    const entry = s.shuffled[s.index];
+    if (entry && entry.speak) {
+      setTimeout(() => speak(entry.speak, 'fr-FR'), 400);
+    }
+  }
+
   // Show button with countdown animation
   const delay = selected === correct ? 2500 : 6000;
   nextBtn.classList.remove('hidden');
@@ -955,9 +1017,11 @@ function selectTab(tab) {
   document.getElementById('dir-fr-de').classList.toggle('active', dir === 'fr-de');
   document.getElementById('dir-de-fr').classList.toggle('active', dir === 'de-fr');
 
-  // Sync active color for direction toggle
-  const colors = { rosa: '#ec4899', gelb: '#f59e0b', gruen: '#16a34a' };
-  document.getElementById('global-dir-toggle').style.setProperty('--active-color', colors[tab]);
+  // Sync active color for direction toggle; hide it for conjugation tab
+  const colors = { rosa: '#ec4899', gelb: '#f59e0b', gruen: '#16a34a', blau: '#7c3aed' };
+  const dirToggle = document.getElementById('global-dir-toggle');
+  dirToggle.style.setProperty('--active-color', colors[tab]);
+  dirToggle.style.display = tab === 'blau' ? 'none' : '';
 }
 
 function setGlobalDirection(dir) {
@@ -1208,7 +1272,7 @@ function soundRain() {
 // ──────────────────────────────────────────
 // INIT
 // ──────────────────────────────────────────
-['rosa', 'gelb', 'gruen'].forEach(tab => {
+['rosa', 'gelb', 'gruen', 'blau'].forEach(tab => {
   state[tab].shuffled = shuffle(vocab[tab]);
   renderQuiz(tab);
 });

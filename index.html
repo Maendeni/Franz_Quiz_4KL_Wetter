@@ -965,6 +965,14 @@ function getWrongOptions(list, correctEntry, direction, count = 3) {
   return shuffled.map(e => direction === 'fr-de' ? e.de : e.fr);
 }
 
+// Pro Session: blau (Konjugation) auf 20 zufällige Fragen begrenzen
+const SESSION_LIMIT = { blau: 20 };
+function buildSession(tab) {
+  const all = shuffle(vocab[tab]);
+  const limit = SESSION_LIMIT[tab];
+  return limit ? all.slice(0, limit) : all;
+}
+
 // ──────────────────────────────────────────
 // RENDER
 // ──────────────────────────────────────────
@@ -1187,7 +1195,7 @@ function restartQuiz(tab) {
   state[tab].index = 0;
   state[tab].score = 0;
   state[tab].answered = false;
-  state[tab].shuffled = shuffle(vocab[tab]);
+  state[tab].shuffled = buildSession(tab);
   renderQuiz(tab);
 }
 
@@ -1220,7 +1228,7 @@ function setGlobalDirection(dir) {
   state[currentTab].index = 0;
   state[currentTab].score = 0;
   state[currentTab].answered = false;
-  state[currentTab].shuffled = shuffle(vocab[currentTab]);
+  state[currentTab].shuffled = buildSession(currentTab);
 
   document.getElementById('dir-fr-de').classList.toggle('active', dir === 'fr-de');
   document.getElementById('dir-de-fr').classList.toggle('active', dir === 'de-fr');
@@ -1463,7 +1471,7 @@ function soundRain() {
 // INIT
 // ──────────────────────────────────────────
 ['rosa', 'gelb', 'gruen', 'blau'].forEach(tab => {
-  state[tab].shuffled = shuffle(vocab[tab]);
+  state[tab].shuffled = buildSession(tab);
   renderQuiz(tab);
 });
 </script>

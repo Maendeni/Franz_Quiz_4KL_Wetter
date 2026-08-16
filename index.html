@@ -1269,18 +1269,36 @@ function loescheFehler(k) {
   daten.fehler = daten.fehler.filter(f => !(f.d === k.deckId && f.k === k.schluessel));
 }
 
-const lobText = [
-  '✦ Zauberhaft!', '✦ Bravo!', '✦ Perfekt gesprochen!', '✦ Meisterlich!',
-  '✦ Das sass!', '✦ Wunderbar!', '✦ Magnifique!', '✦ Glänzend!',
-  '✦ Ausgezeichnet!', '✦ Weiter so!', '✦ Verzaubernd!', '✦ Parfait!',
-];
-const trostText = [
-  'Der Zauber ging daneben – schau die Antwort an.',
-  'Fast! Merke dir die richtige Antwort.',
-  'Noch nicht – aber du lernst es.',
-  'Schau genau hin, dann klappt es.',
-  'Nächster Versuch, nächster Zauber.',
-];
+// Rückmeldungen in der Sprache des Decks – im Englisch-Quiz kein «Magnifique»
+const lobText = {
+  fr: [
+    '✦ Magnifique !', '✦ Parfait !', '✦ Bravo !', '✦ Formidable !',
+    '✦ Excellent !', '✦ Superbe !', '✦ Der Zauber sitzt!', '✦ Meisterlich!',
+    '✦ Das sass!', '✦ Zauberhaft!',
+  ],
+  en: [
+    '✦ Brilliant!', '✦ Splendid!', '✦ Well done!', '✦ Excellent!',
+    '✦ Spot on!', '✦ Marvellous!', '✦ Der Zauber sitzt!', '✦ Meisterlich!',
+    '✦ Das sass!', '✦ Zauberhaft!',
+  ],
+};
+
+const trostText = {
+  fr: [
+    'Zut ! Der Zauber ging daneben – schau die Antwort an.',
+    'Presque ! Merke dir die richtige Antwort.',
+    'Noch nicht – aber der Bann bricht bald.',
+    'Schau genau hin, dann sitzt der Spruch.',
+    'Nächster Versuch, nächster Zauber.',
+  ],
+  en: [
+    'Oops! Der Zauber ging daneben – schau die Antwort an.',
+    'Almost! Merke dir die richtige Antwort.',
+    'Noch nicht – aber der Bann bricht bald.',
+    'Schau genau hin, dann sitzt der Spruch.',
+    'Nächster Versuch, nächster Zauber.',
+  ],
+};
 function zufall(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
 let weiterTimer = null;
@@ -1311,7 +1329,7 @@ function pruefe(btn, gewaehlt, k) {
     zeigeXPGewinn(xp, serie, btn);
     document.getElementById('score-info').textContent =
       `✅ ${aktuell.score} richtig` + (serie >= 2 ? `  🔥 ${serie}` : '');
-    feedback.textContent = zufall(lobText);
+    feedback.textContent = zufall(lobText[k.sprache] || lobText.fr);
     feedback.className = 'feedback correct';
     tonRichtig();
     // Im Fehler-Deck gilt das Wort damit als aufgeholt
@@ -1319,7 +1337,7 @@ function pruefe(btn, gewaehlt, k) {
   } else {
     btn.classList.add('wrong');
     serie = 0;
-    feedback.textContent = zufall(trostText);
+    feedback.textContent = zufall(trostText[k.sprache] || trostText.fr);
     feedback.className = 'feedback wrong';
     tonFalsch();
     merkeFehler(k);

@@ -787,7 +787,8 @@ const SPEICHER = 'franz_quiz_v1';
 const MAX_FEHLER = 80;
 
 function leereDaten() {
-  return { version: 1, xp: { fr: 0, en: 0 }, decks: {}, fehler: [], letztes: null, vorlesen: true };
+  return { version: 1, xp: { fr: 0, en: 0 }, decks: {}, fehler: [],
+           letztes: null, laufend: null, vorlesen: true };
 }
 
 function ladeDaten() {
@@ -1145,9 +1146,13 @@ function zeigeMenu() {
   if (letztes && anzahlWoerter(letztes) > 0) {
     const stand = daten.decks[letztes.id];
     const wann = stand && wannText(stand.zuletzt);
+    const offen = laufendPasst(letztes.id, daten.letztes.modus);
+    const unter = offen
+      ? `${letztes.titel} — Frage ${daten.laufend.index + 1} von ${daten.laufend.karten.length}`
+      : `${letztes.titel}${wann ? ' — ' + wann : ''}`;
     btn.innerHTML = `
-      <span class="emoji">⏱️</span>
-      <span class="t"><b>Weiter üben</b><span>${letztes.titel}${wann ? ' — ' + wann : ''}</span></span>
+      <span class="emoji">${offen ? '📜' : '⏱️'}</span>
+      <span class="t"><b>${offen ? 'Runde fortsetzen' : 'Weiter üben'}</b><span>${unter}</span></span>
       <span class="go">→</span>`;
     btn.style.display = '';
     btn.onclick = () => oeffneDeck(letztes.id, daten.letztes.modus);
@@ -1200,8 +1205,45 @@ function oeffneDeck(id, modus) {
     `<button class="mode-btn ${m.id === aktuell.modus ? 'active' : ''}"
              onclick="setzeModus('${m.id}')">${m.label}</button>`).join('');
 
-  starteRunde();
+  // Angefangene Runde fortsetzen statt neu beginnen
+  if (laufendPasst(id, aktuell.modus)) {
+    const l = daten.laufend;
+    stoppeTimer();
+    stoppeCanvas();
+    serie = 0;
+    aktuell.index = l.index;
+    aktuell.score = l.score;
+    aktuell.beantwortet = false;
+    aktuell.karten = l.karten;
+    zeichneFrage();
+  } else {
+    starteRunde();
+  }
   window.scrollTo(0, 0);
+}
+
+// Passt die gespeicherte Runde zu diesem Deck – und ist sie noch frisch?
+function laufendPasst(deckId, modus) {
+  const l = daten.laufend;
+  return !!l
+    && l.deckId === deckId
+    && l.modus === modus
+    && Array.isArray(l.karten)
+    && l.index < l.karten.length
+    && (Date.now() - l.zeit) < 24 * 3600 * 1000;
+}
+
+// Stand der laufenden Runde sichern (überlebt auch einen App-Neustart)
+function merkeLaufend(index) {
+  daten.laufend = {
+    deckId: aktuell.deck.id,
+    modus: aktuell.modus,
+    index,
+    score: aktuell.score,
+    karten: aktuell.karten,
+    zeit: Date.now(),
+  };
+  speichere();
 }
 
 function setzeModus(modus) {
@@ -1222,6 +1264,7 @@ function starteRunde() {
   aktuell.score = 0;
   aktuell.beantwortet = false;
   aktuell.karten = baueSession(aktuell.deck, aktuell.modus);
+  daten.laufend = null;   // eine neue Runde ersetzt die angefangene
   zeichneFrage();
 }
 
@@ -1232,6 +1275,7 @@ function zeichneFrage() {
 
   const k = aktuell.karten[aktuell.index];
   zeigeNiveau(k.sprache);
+  merkeLaufend(aktuell.index);
 
   const optionen = mische([k.korrekt, ...k.falsche]);
   const fortschritt = (aktuell.index / aktuell.karten.length) * 100;
@@ -1360,7 +1404,9 @@ function pruefe(btn, gewaehlt, k) {
     tonFalsch();
     merkeFehler(k);
   }
-  speichere();
+  // Beantwortete Frage gilt als erledigt – beim Fortsetzen geht es
+  // mit der nächsten weiter, nicht nochmals mit dieser
+  merkeLaufend(aktuell.index + 1);
 
   // Nur fremdsprachige Antworten vorlesen – deutsche Wörter kann sie selbst
   if (vorlesen && k.sprechAntwort && k.sprechAntwort.lang !== 'de-DE') {
@@ -1393,6 +1439,7 @@ function zeigeErgebnis() {
   stand.letzteQuote = pct;
   stand.zuletzt = Date.now();
   daten.decks[aktuell.deck.id] = stand;
+  daten.laufend = null;   // Runde ist zu Ende
   speichere();
 
   let anim = '', text = '', sterne = '';

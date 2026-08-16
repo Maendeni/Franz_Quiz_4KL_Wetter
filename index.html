@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<meta name="theme-color" content="#fff9fb">
+<meta name="theme-color" content="#150f0c">
 <!-- Über „Zum Home-Bildschirm" startet das Quiz im Vollbild und behält seinen Speicher -->
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
@@ -11,18 +11,28 @@
 <!-- Symbol für den Home-Bildschirm; iOS rundet die Ecken selbst -->
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
 <link rel="icon" type="image/png" href="apple-touch-icon.png">
-<title>Sprachen Üben 🌟</title>
-<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800;900&family=Baloo+2:wght@400;600;800&display=swap" rel="stylesheet">
+<title>Sprachen Üben ✦</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@500;700;900&family=EB+Garamond:ital,wght@0,500;0,600;0,700;1,500&display=swap" rel="stylesheet">
 <style>
   :root {
-    --correct: #4ade80;
-    --wrong: #f87171;
-    --bg: #fff9fb;
-    --text: #1e1b4b;
-    --muted: #9ca3af;
-    --radius: 20px;
-    --c: #ec4899;
-    --cl: #fce7f3;
+    /* Zauberschule: Pergament, Tinte, Gold, Kerzenschein */
+    --pergament:      #f2e3c2;
+    --pergament-hell: #faf1da;
+    --pergament-dunkel: #e2cfa4;
+    --tinte:       #2a1c10;
+    --tinte-blass: #6b563c;
+    --gold:        #c9a227;
+    --gold-hell:   #e9cf7a;
+    --dunkel:      #150f0c;
+    --dunkel-warm: #241a13;
+    --correct: #2f7d4f;
+    --wrong:   #a32b2b;
+    --bg: var(--dunkel);
+    --text: var(--tinte);
+    --muted: var(--tinte-blass);
+    --radius: 10px;
+    --c: #7b1f2b;
+    --cl: #f0d9d2;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -30,14 +40,15 @@
   html { -webkit-text-size-adjust: 100%; }
 
   body {
-    font-family: 'Nunito', -apple-system, sans-serif;
-    background: var(--bg);
-    color: var(--text);
+    font-family: 'EB Garamond', Georgia, serif;
+    background: var(--dunkel);
+    color: var(--pergament);
     min-height: 100vh;
     min-height: 100dvh;
-    background-image: radial-gradient(circle at 20% 15%, #fce7f3 0%, transparent 45%),
-                      radial-gradient(circle at 85% 85%, #fefce8 0%, transparent 45%),
-                      radial-gradient(circle at 60% 55%, #f0fdf4 0%, transparent 40%);
+    /* Kerzenschein aus zwei Ecken, dazu ein warmer Schimmer in der Mitte */
+    background-image: radial-gradient(circle at 15% 8%,  rgba(201,162,39,0.22) 0%, transparent 42%),
+                      radial-gradient(circle at 88% 92%, rgba(180,90,40,0.18) 0%, transparent 45%),
+                      radial-gradient(circle at 50% 45%, rgba(90,60,30,0.35) 0%, transparent 65%);
     background-attachment: fixed;
     /* iOS: nichts unter der Home-Leiste verstecken */
     padding: env(safe-area-inset-top) env(safe-area-inset-right)
@@ -70,10 +81,11 @@
   .back-btn {
     width: 40px; height: 40px;
     flex-shrink: 0;
-    border: none;
+    border: 1.5px solid var(--gold);
     border-radius: 50%;
-    background: white;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    background: var(--dunkel-warm);
+    color: var(--gold-hell);
+    box-shadow: 0 0 12px rgba(201,162,39,0.25);
     font-size: 1.25rem;
     line-height: 1;
     display: none;
@@ -84,13 +96,15 @@
   body.quiz .back-btn { display: flex; }
 
   header h1 {
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.25rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #ec4899, #f59e0b, #16a34a);
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    background: linear-gradient(135deg, #e9cf7a, #c9a227 55%, #8c6b14);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
+    text-shadow: 0 0 18px rgba(201,162,39,0.25);
     flex: 1;
     min-width: 0;
     overflow: hidden;
@@ -114,20 +128,26 @@
     gap: 12px;
     width: 100%;
     text-align: left;
-    border: none;
+    border: 1.5px solid var(--gold);
     border-radius: var(--radius);
     padding: 14px 16px;
     margin-bottom: 22px;
-    color: white;
-    background: linear-gradient(135deg, #ec4899, #f59e0b);
-    box-shadow: 0 6px 20px rgba(236,72,153,0.28);
+    color: var(--gold-hell);
+    background: linear-gradient(135deg, #3a2418, #241a13 60%, #1c1410);
+    box-shadow: 0 0 22px rgba(201,162,39,0.18), inset 0 0 30px rgba(201,162,39,0.07);
   }
   .resume:active { transform: scale(0.985); }
-  .resume .emoji { font-size: 1.7rem; }
+  .resume .emoji { font-size: 1.6rem; }
   .resume .t { flex: 1; min-width: 0; }
-  .resume .t b { display: block; font-size: 1rem; font-weight: 800; color: white; }
-  .resume .t span { font-size: 0.76rem; font-weight: 700; opacity: 0.92; }
-  .resume .go { font-size: 1.3rem; }
+  .resume .t b {
+    display: block;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gold-hell);
+  }
+  .resume .t span { font-size: 0.82rem; font-weight: 600; color: #b9a37a; }
+  .resume .go { font-size: 1.2rem; color: var(--gold); }
 
   .group { margin-bottom: 14px; }
 
@@ -146,27 +166,29 @@
   .group-head .title {
     flex: 1;
     min-width: 0;
-    font-size: 0.8rem;
-    font-weight: 800;
-    letter-spacing: 0.4px;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.76rem;
+    font-weight: 700;
+    letter-spacing: 1px;
     text-transform: uppercase;
-    color: #6b7280;
+    color: var(--gold);
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
   }
   .group-head .niveau {
     font-size: 0.72rem;
-    font-weight: 800;
-    color: var(--muted);
+    font-weight: 700;
+    color: #9c7f4e;
     white-space: nowrap;
   }
-  .group-head .chev { font-size: 0.7rem; color: var(--muted); transition: transform 0.2s ease; }
+  .group-head .chev { font-size: 0.7rem; color: #9c7f4e; transition: transform 0.2s ease; }
   .group.closed .chev { transform: rotate(-90deg); }
   .group.closed .deck-list { display: none; }
 
   .deck-list { display: flex; flex-direction: column; gap: 8px; }
 
+  /* Deck-Karte = Pergamentstreifen mit Wachssiegel */
   .deck {
     display: flex;
     align-items: center;
@@ -174,60 +196,73 @@
     width: 100%;
     min-height: 64px;
     text-align: left;
-    background: white;
-    border: none;
-    border-left: 5px solid var(--dc, #ec4899);
-    border-radius: 14px;
+    color: var(--tinte);
+    background:
+      linear-gradient(115deg, rgba(255,255,255,0.35) 0%, transparent 35%),
+      radial-gradient(ellipse at 80% 120%, rgba(120,80,30,0.14) 0%, transparent 60%),
+      var(--pergament);
+    border: 1px solid var(--pergament-dunkel);
+    border-left: 5px solid var(--dc, #7b1f2b);
+    border-radius: 4px;
     padding: 12px 14px;
-    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.45);
   }
-  .deck:active { transform: scale(0.985); box-shadow: 0 1px 4px rgba(0,0,0,0.08); }
+  .deck:active { transform: scale(0.985); box-shadow: 0 1px 4px rgba(0,0,0,0.5); }
   @media (hover: hover) {
-    .deck:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+    .deck:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.55), 0 0 0 1px var(--gold); }
   }
-  .deck.leer { opacity: 0.5; }
+  .deck.leer { opacity: 0.42; }
   .deck.leer:active { transform: none; }
 
   .deck .icon {
     width: 38px; height: 38px;
     flex-shrink: 0;
-    border-radius: 12px;
-    background: var(--dcl, #fce7f3);
+    border-radius: 50%;
+    background: var(--dc, #7b1f2b);
+    border: 2px solid var(--gold);
+    box-shadow: inset 0 1px 3px rgba(255,255,255,0.25), 0 1px 3px rgba(0,0,0,0.3);
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.15rem;
+    font-size: 1.05rem;
   }
   .deck .txt { flex: 1; min-width: 0; }
-  .deck .txt b { display: block; font-size: 0.95rem; font-weight: 800; line-height: 1.25; }
-  .deck .txt span { font-size: 0.75rem; font-weight: 700; color: var(--muted); }
+  .deck .txt b {
+    display: block;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: var(--tinte);
+  }
+  .deck .txt span { font-size: 0.8rem; font-weight: 500; font-style: italic; color: var(--tinte-blass); }
   .deck .ring {
     flex-shrink: 0;
     width: 34px; height: 34px;
     display: grid;
     place-items: center;
     font-size: 0.62rem;
-    font-weight: 800;
-    color: var(--dc, #ec4899);
+    font-weight: 700;
+    color: #7a5c1e;
     border-radius: 50%;
-    background: conic-gradient(var(--dc) calc(var(--p, 0) * 1%), #f3f4f6 0);
+    background: conic-gradient(var(--gold) calc(var(--p, 0) * 1%), rgba(120,90,40,0.18) 0);
     position: relative;
   }
   .deck .ring::before {
     content: '';
     position: absolute;
     inset: 4px;
-    background: white;
+    background: var(--pergament);
     border-radius: 50%;
   }
   .deck .ring i { position: relative; font-style: normal; }
 
   .hinweis {
-    margin-top: 20px;
+    margin-top: 22px;
     text-align: center;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #c4c1cc;
+    font-size: 0.76rem;
+    font-style: italic;
+    color: #7a6748;
   }
 
   /* ── SPIELER-LEISTE ──────────────────────── */
@@ -237,15 +272,30 @@
     gap: 8px;
     margin-bottom: 14px;
   }
-  .level-badge { font-size: 0.78rem; font-weight: 800; color: #6b7280; white-space: nowrap; }
-  .xp-bar-wrap { flex: 1; background: #f3f4f6; border-radius: 50px; height: 7px; overflow: hidden; min-width: 50px; }
+  .level-badge {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.74rem;
+    font-weight: 700;
+    color: var(--gold-hell);
+    white-space: nowrap;
+  }
+  .xp-bar-wrap {
+    flex: 1;
+    background: rgba(120,90,40,0.25);
+    border: 1px solid rgba(201,162,39,0.35);
+    border-radius: 50px;
+    height: 8px;
+    overflow: hidden;
+    min-width: 50px;
+  }
   .xp-bar-fill {
     height: 100%;
     border-radius: 50px;
-    background: linear-gradient(90deg, #ec4899, #f59e0b);
+    background: linear-gradient(90deg, #8c6b14, #e9cf7a);
+    box-shadow: 0 0 8px rgba(233,207,122,0.6);
     transition: width 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
-  .xp-label { font-size: 0.7rem; font-weight: 700; color: var(--muted); white-space: nowrap; }
+  .xp-label { font-size: 0.72rem; font-weight: 600; color: #9c7f4e; white-space: nowrap; }
 
   /* ── MODUS-LEISTE ────────────────────────── */
   .mode-bar {
@@ -259,8 +309,8 @@
   .modes {
     display: flex;
     border-radius: 50px;
-    border: 2px solid #e5e7eb;
-    background: #f9fafb;
+    border: 1.5px solid rgba(201,162,39,0.45);
+    background: rgba(36,26,19,0.8);
     overflow: hidden;
   }
   .mode-btn {
@@ -268,19 +318,25 @@
     padding: 6px 12px;
     border: none;
     background: transparent;
-    font-size: 0.78rem;
-    font-weight: 700;
-    color: #6b7280;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #b9a37a;
     white-space: nowrap;
   }
-  .mode-btn.active { background: var(--c); color: white; border-radius: 50px; }
+  .mode-btn.active {
+    background: linear-gradient(180deg, #e9cf7a, #c9a227);
+    color: #2a1c10;
+    font-weight: 700;
+    border-radius: 50px;
+  }
 
   .toggle-wrap { position: relative; width: 46px; height: 26px; flex-shrink: 0; }
   .toggle-wrap input { opacity: 0; width: 0; height: 0; position: absolute; }
   .toggle-slider {
     position: absolute;
     inset: 0;
-    background: #d1d5db;
+    background: rgba(120,90,40,0.45);
+    border: 1px solid rgba(201,162,39,0.35);
     border-radius: 50px;
     transition: background 0.25s;
     cursor: pointer;
@@ -290,41 +346,54 @@
     position: absolute;
     width: 20px; height: 20px;
     left: 3px; top: 3px;
-    background: white;
+    background: var(--pergament-hell);
     border-radius: 50%;
     transition: transform 0.25s;
     box-shadow: 0 1px 4px rgba(0,0,0,0.2);
   }
-  .toggle-wrap input:checked + .toggle-slider { background: var(--c); }
+  .toggle-wrap input:checked + .toggle-slider { background: linear-gradient(180deg, #e9cf7a, #c9a227); }
   .toggle-wrap input:checked + .toggle-slider::before { transform: translateX(20px); }
   .autoread-icon { font-size: 0.95rem; }
 
   /* ── FORTSCHRITT ─────────────────────────── */
   .progress-bar-wrap {
-    background: #f3f4f6;
+    background: rgba(120,90,40,0.25);
+    border: 1px solid rgba(201,162,39,0.3);
     border-radius: 50px;
     height: 10px;
     margin-bottom: 8px;
     overflow: hidden;
   }
-  .progress-bar-fill { height: 100%; border-radius: 50px; transition: width 0.4s ease; background: var(--c); }
+  .progress-bar-fill {
+    height: 100%;
+    border-radius: 50px;
+    transition: width 0.4s ease;
+    background: linear-gradient(90deg, #8c6b14, #e9cf7a);
+  }
   .progress-info {
     display: flex;
     justify-content: space-between;
-    font-size: 0.82rem;
-    color: var(--muted);
-    font-weight: 700;
+    font-size: 0.84rem;
+    color: #9c7f4e;
+    font-weight: 600;
     margin-bottom: 18px;
   }
 
   /* ── KARTE ───────────────────────────────── */
+  /* Quiz-Karte = aufgeschlagenes Pergament */
   .card {
-    background: white;
+    color: var(--tinte);
+    background:
+      linear-gradient(125deg, rgba(255,255,255,0.4) 0%, transparent 30%),
+      radial-gradient(ellipse at 15% 100%, rgba(120,80,30,0.13) 0%, transparent 55%),
+      radial-gradient(ellipse at 90% 0%, rgba(120,80,30,0.1) 0%, transparent 50%),
+      var(--pergament);
+    border: 1px solid var(--pergament-dunkel);
+    border-top: 4px solid var(--c);
     border-radius: var(--radius);
-    padding: 32px 22px 26px;
+    padding: 30px 22px 26px;
     text-align: center;
-    box-shadow: 0 4px 24px rgba(0,0,0,0.08), 0 1px 4px rgba(0,0,0,0.04);
-    border-top: 6px solid var(--c);
+    box-shadow: 0 8px 30px rgba(0,0,0,0.55), inset 0 0 40px rgba(180,140,80,0.15);
     animation: slideIn 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
   @keyframes slideIn {
@@ -333,11 +402,12 @@
   }
 
   .card-label {
-    font-size: 0.75rem;
-    font-weight: 800;
-    letter-spacing: 1.4px;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 1.6px;
     text-transform: uppercase;
-    color: var(--muted);
+    color: #8a6d3f;
     margin-bottom: 10px;
   }
 
@@ -349,15 +419,16 @@
     margin-bottom: 28px;
   }
   .card-word {
-    font-family: 'Baloo 2', cursive;
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1.2;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 1.85rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: var(--tinte);
   }
 
   .speak-btn {
-    background: none;
-    border: 2px solid #e5e7eb;
+    background: rgba(255,255,255,0.35);
+    border: 1.5px solid var(--pergament-dunkel);
     border-radius: 50%;
     width: 40px; height: 40px;
     font-size: 1.1rem;
@@ -366,7 +437,7 @@
     justify-content: center;
     transition: all 0.15s;
     flex-shrink: 0;
-    color: var(--muted);
+    color: var(--tinte-blass);
   }
   .speak-btn:active { border-color: var(--c); background: var(--cl); color: var(--c); }
   .speak-btn.speaking {
@@ -386,27 +457,40 @@
   .ans-btn {
     min-height: 54px;
     padding: 13px 10px;
-    border-radius: 14px;
-    border: 2.5px solid #e5e7eb;
-    background: white;
-    font-size: 1rem;
-    font-weight: 700;
+    border-radius: 6px;
+    border: 1.5px solid var(--pergament-dunkel);
+    background: linear-gradient(180deg, var(--pergament-hell), #f0e0be);
+    color: var(--tinte);
+    font-family: 'EB Garamond', Georgia, serif;
+    font-size: 1.05rem;
+    font-weight: 600;
     transition: all 0.15s ease;
     line-height: 1.3;
+    box-shadow: 0 1px 2px rgba(90,60,20,0.18);
   }
-  .ans-btn:active:not(:disabled) { border-color: var(--c); background: var(--cl); }
+  .ans-btn:active:not(:disabled) { border-color: var(--gold); background: var(--cl); }
   @media (hover: hover) {
-    .ans-btn:hover:not(:disabled) { border-color: var(--c); background: var(--cl); }
+    .ans-btn:hover:not(:disabled) { border-color: var(--gold); background: var(--cl); }
   }
-  .ans-btn.correct { background: #dcfce7; border-color: #16a34a; color: #15803d; }
-  .ans-btn.wrong   { background: #fee2e2; border-color: #ef4444; color: #b91c1c; }
+  .ans-btn.correct {
+    background: #d8e8cf;
+    border-color: var(--correct);
+    color: #1e5233;
+    box-shadow: 0 0 12px rgba(47,125,79,0.35);
+  }
+  .ans-btn.wrong {
+    background: #eed6d1;
+    border-color: var(--wrong);
+    color: #7d1f1f;
+  }
   .ans-btn:disabled { cursor: default; }
 
   /* ── RÜCKMELDUNG ─────────────────────────── */
   .feedback {
     margin-top: 18px;
-    font-size: 1.3rem;
-    font-weight: 800;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 700;
     min-height: 34px;
     animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
   }
@@ -414,8 +498,8 @@
     from { opacity: 0; transform: scale(0.7); }
     to   { opacity: 1; transform: scale(1); }
   }
-  .feedback.correct { color: #16a34a; }
-  .feedback.wrong   { color: #ef4444; }
+  .feedback.correct { color: #2f7d4f; }
+  .feedback.wrong   { color: #a32b2b; }
 
   .next-btn-wrap { display: flex; justify-content: center; margin: 14px auto 0; }
   .next-btn {
@@ -423,12 +507,13 @@
     min-height: 46px;
     padding: 11px 28px;
     border-radius: 50px;
-    border: none;
-    background: var(--c);
-    color: white;
-    font-size: 0.95rem;
-    font-weight: 800;
-    box-shadow: 0 4px 14px rgba(0,0,0,0.15);
+    border: 1.5px solid var(--gold);
+    background: linear-gradient(180deg, #3a2418, #241a13);
+    color: var(--gold-hell);
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.9rem;
+    font-weight: 700;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.4), 0 0 14px rgba(201,162,39,0.2);
     overflow: hidden;
   }
   .next-btn:active { transform: translateY(1px); }
@@ -437,7 +522,7 @@
     position: absolute;
     top: 0; right: 0;
     height: 100%; width: 100%;
-    background: rgba(255,255,255,0.25);
+    background: rgba(201,162,39,0.3);
     transform-origin: right center;
     border-radius: 50px;
   }
@@ -453,42 +538,59 @@
   /* ── ERGEBNIS ────────────────────────────── */
   .result-screen { text-align: center; padding: 30px 10px; position: relative; animation: slideIn 0.4s ease; }
   .result-screen h2 {
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.8rem;
-    font-weight: 800;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--gold-hell);
     margin-bottom: 10px;
     animation: fadeSlideUp 0.5s ease 0.2s both;
   }
-  .result-score { font-size: 2.8rem; font-weight: 900; margin: 8px 0 18px; animation: fadeSlideUp 0.5s ease 0.35s both; }
-  .result-screen p { color: #6b7280; font-size: 1rem; font-weight: 600; margin-bottom: 22px; }
+  .result-score {
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 2.6rem;
+    font-weight: 900;
+    color: var(--gold);
+    margin: 8px 0 18px;
+    text-shadow: 0 0 20px rgba(201,162,39,0.35);
+    animation: fadeSlideUp 0.5s ease 0.35s both;
+  }
+  .result-screen p { color: #b9a37a; font-size: 1rem; font-style: italic; margin-bottom: 22px; }
   @keyframes fadeSlideUp {
     from { opacity: 0; transform: translateY(15px); }
     to   { opacity: 1; transform: translateY(0); }
   }
-  .stars { font-size: 1.8rem; margin-bottom: 6px; letter-spacing: 4px; }
+  .stars {
+    font-size: 1.5rem;
+    margin-bottom: 6px;
+    letter-spacing: 6px;
+    color: var(--gold);
+    text-shadow: 0 0 14px rgba(201,162,39,0.6);
+  }
 
   .result-btns { display: flex; flex-direction: column; gap: 10px; align-items: center; }
   .restart-btn {
     min-height: 52px;
-    padding: 14px 40px;
+    padding: 14px 38px;
     border-radius: 50px;
-    border: none;
-    background: linear-gradient(135deg, #ec4899, #f59e0b);
-    color: white;
-    font-size: 1.05rem;
-    font-weight: 800;
-    box-shadow: 0 4px 20px rgba(236,72,153,0.35);
+    border: 1.5px solid var(--gold);
+    background: linear-gradient(180deg, #e9cf7a, #c9a227);
+    color: #2a1c10;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.98rem;
+    font-weight: 700;
+    box-shadow: 0 4px 22px rgba(201,162,39,0.35);
   }
   .restart-btn:active { transform: translateY(1px); }
   .menu-btn {
     min-height: 44px;
     padding: 10px 26px;
     border-radius: 50px;
-    border: 2px solid #e5e7eb;
-    background: white;
-    font-size: 0.9rem;
-    font-weight: 800;
-    color: #6b7280;
+    border: 1.5px solid rgba(201,162,39,0.4);
+    background: transparent;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: #b9a37a;
   }
 
   /* ── ANIMATIONEN ERGEBNIS ────────────────── */
@@ -500,72 +602,105 @@
     z-index: 999;
   }
 
-  .sun-container { position: relative; width: 120px; height: 120px; margin: 0 auto 16px; }
-  .sun {
-    width: 80px; height: 80px;
-    background: radial-gradient(circle, #fde68a, #f59e0b);
+  /* Zauberstab mit leuchtender Spitze (ab 70%) */
+  .stab-wrap { position: relative; width: 150px; height: 120px; margin: 0 auto 14px; }
+  .stab {
+    position: absolute;
+    left: 14px; bottom: 26px;
+    width: 100px; height: 9px;
+    border-radius: 5px;
+    background: linear-gradient(90deg, #2f1d12, #6b4a2a 55%, #8a6a3a);
+    transform: rotate(-30deg);
+    transform-origin: left bottom;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.55);
+  }
+  .stab-licht {
+    position: absolute;
+    left: 88px; top: 14px;
+    width: 34px; height: 34px;
     border-radius: 50%;
+    background: radial-gradient(circle, #fffbe8 0%, #e9cf7a 40%, rgba(233,207,122,0.35) 62%, transparent 72%);
+    animation: stabPuls 1.7s ease-in-out infinite;
+  }
+  @keyframes stabPuls {
+    0%, 100% { transform: scale(1);    opacity: 0.85; }
+    50%      { transform: scale(1.35); opacity: 1; }
+  }
+  .funke {
     position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    box-shadow: 0 0 30px #fde68a, 0 0 60px #f59e0b44;
-    animation: sunPulse 2s ease-in-out infinite;
-  }
-  @keyframes sunPulse {
-    0%, 100% { box-shadow: 0 0 30px #fde68a, 0 0 60px #f59e0b44; transform: translate(-50%,-50%) scale(1); }
-    50%      { box-shadow: 0 0 50px #fde68a, 0 0 90px #f59e0b66; transform: translate(-50%,-50%) scale(1.07); }
-  }
-  .sun-ray {
-    position: absolute;
-    top: 50%; left: 50%;
-    width: 4px; height: 20px;
-    background: linear-gradient(to bottom, #fde68a, transparent);
-    border-radius: 4px;
-    transform-origin: 50% 60px;
-    animation: rayRotate 8s linear infinite;
-  }
-  @keyframes rayRotate { to { transform: rotate(360deg); } }
-
-  .rainbow-wrap { width: 200px; height: 100px; margin: 0 auto 16px; position: relative; overflow: hidden; }
-  .rainbow-arc {
-    width: 200px; height: 200px;
+    left: 102px; top: 28px;
+    width: 5px; height: 5px;
     border-radius: 50%;
-    position: absolute;
-    top: 0; left: 0;
-    border: 14px solid transparent;
-    animation: rainbowAppear 1s ease both;
+    background: #f3dc9b;
+    box-shadow: 0 0 8px #e9cf7a;
+    animation: funkeFliegt 1.9s ease-out infinite;
   }
-  @keyframes rainbowAppear {
-    from { opacity: 0; transform: scaleX(0.5); }
-    to   { opacity: 1; transform: scaleX(1); }
+  @keyframes funkeFliegt {
+    0%   { transform: translate(0, 0) scale(1); opacity: 1; }
+    100% { transform: translate(var(--dx), var(--dy)) scale(0.2); opacity: 0; }
   }
 
-  .rain-wrap { position: relative; height: 80px; margin-bottom: 10px; overflow: hidden; }
-  .raindrop {
+  /* Brennende Kerze (ab 40%) */
+  .kerze-wrap { width: 120px; height: 118px; margin: 0 auto 14px; position: relative; }
+  .kerze-koerper {
     position: absolute;
-    width: 3px;
-    border-radius: 50px;
-    background: linear-gradient(to bottom, #93c5fd, #3b82f6);
-    animation: falling linear infinite;
+    left: 50%; bottom: 6px;
+    transform: translateX(-50%);
+    width: 26px; height: 58px;
+    border-radius: 4px 4px 3px 3px;
+    background: linear-gradient(90deg, #d9c69c, #f7eed6 42%, #dccaa2);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.5);
   }
-  @keyframes falling {
-    0%   { transform: translateY(-20px); opacity: 0; }
-    10%  { opacity: 1; }
-    90%  { opacity: 1; }
-    100% { transform: translateY(80px); opacity: 0; }
+  .kerze-docht {
+    position: absolute;
+    left: 50%; bottom: 64px;
+    transform: translateX(-50%);
+    width: 2px; height: 9px;
+    background: #2f1d12;
   }
-  .cloud-svg { animation: cloudFloat 3s ease-in-out infinite; }
-  @keyframes cloudFloat {
-    0%, 100% { transform: translateY(0); }
-    50%      { transform: translateY(-6px); }
+  .kerze-flamme {
+    position: absolute;
+    left: 50%; bottom: 71px;
+    width: 17px; height: 28px;
+    border-radius: 50% 50% 45% 45% / 62% 62% 38% 38%;
+    background: radial-gradient(circle at 50% 72%, #fffbe8 0%, #ffe9a8 22%, #f5b53c 48%, rgba(240,120,20,0.55) 76%, transparent 88%);
+    box-shadow: 0 0 30px rgba(245,181,60,0.55);
+    animation: flackern 1.15s ease-in-out infinite;
+  }
+  @keyframes flackern {
+    0%, 100% { transform: translateX(-50%) scale(1) rotate(-1.5deg); }
+    50%      { transform: translateX(-50%) scale(1.07, 1.13) rotate(1.5deg); }
+  }
+
+  /* Nebelschwaden (unter 40%) */
+  .nebel-wrap { position: relative; height: 96px; margin-bottom: 10px; overflow: hidden; }
+  .nebel {
+    position: absolute;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(198,206,214,0.45), rgba(160,170,180,0.15) 55%, transparent 72%);
+    filter: blur(7px);
+    animation: ziehen linear infinite;
+  }
+  @keyframes ziehen {
+    0%   { transform: translateX(-130px); opacity: 0; }
+    25%  { opacity: 0.9; }
+    75%  { opacity: 0.9; }
+    100% { transform: translateX(130px); opacity: 0; }
+  }
+  .kessel { display: block; margin: 0 auto; animation: kesselWackelt 3s ease-in-out infinite; }
+  @keyframes kesselWackelt {
+    0%, 100% { transform: rotate(-1.5deg); }
+    50%      { transform: rotate(1.5deg); }
   }
 
   /* ── XP-POPUP & LEVEL-UP ─────────────────── */
   .xp-popup {
     position: fixed;
-    font-size: 1rem;
-    font-weight: 800;
-    color: #16a34a;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--gold-hell);
+    text-shadow: 0 0 10px rgba(201,162,39,0.7);
     pointer-events: none;
     z-index: 1001;
     transform: translateX(-50%);
@@ -579,16 +714,17 @@
   .level-up-toast {
     position: fixed;
     top: 50%; left: 50%;
-    background: linear-gradient(135deg, #ec4899, #f59e0b);
-    color: white;
-    font-family: 'Baloo 2', cursive;
-    font-size: 1.35rem;
-    font-weight: 800;
-    padding: 18px 34px;
-    border-radius: 20px;
+    background: linear-gradient(160deg, #3a2418, #241a13);
+    border: 2px solid var(--gold);
+    color: var(--gold-hell);
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 1.15rem;
+    font-weight: 700;
+    padding: 20px 34px;
+    border-radius: 12px;
     text-align: center;
-    line-height: 1.5;
-    box-shadow: 0 8px 40px rgba(236,72,153,0.45);
+    line-height: 1.6;
+    box-shadow: 0 8px 50px rgba(201,162,39,0.4), inset 0 0 40px rgba(201,162,39,0.1);
     z-index: 1002;
     pointer-events: none;
     animation: levelUpPop 2.6s ease forwards;
@@ -609,7 +745,7 @@
 <div class="wrap">
   <header>
     <button class="back-btn" onclick="zumMenu()" aria-label="Zurück zum Menü">←</button>
-    <h1 id="kopf">🌟 Sprachen Üben</h1>
+    <h1 id="kopf">✦ Sprachen Üben ✦</h1>
   </header>
 
   <!-- ══ STARTMENÜ ══ -->
@@ -716,12 +852,14 @@ function schluessel(eintrag) {
 }
 
 // ════════════════════════════════════════════════════════════
-//  NIVEAUS – pro Sprache eigene Bezeichnungen
+//  RÄNGE – pro Sprache eine eigene Reihe, in der Zielsprache
 // ════════════════════════════════════════════════════════════
 const XP_STUFEN = [0, 50, 150, 300, 500, 750, 1000, 1400, 1800, 2500];
 const NIVEAUS = {
-  fr: ['Débutante','Élève','Étudiante','Exploratrice','Académicienne','Championne','Étoile','Virtuose','Maîtresse','Génie'],
-  en: ['Beginner','Learner','Explorer','Achiever','High Flyer','Champion','Star','Virtuoso','Master','Genius'],
+  fr: ['Première année','Apprentie','Élève sorcière','Préfète','Enchanteresse',
+       'Alchimiste','Métamorphe','Duelliste','Sorcière','Grande Magicienne'],
+  en: ['First Year','Apprentice','Spell Student','Prefect','Enchantress',
+       'Alchemist','Shapeshifter','Duellist','Sorceress','Archmage'],
 };
 
 function niveauVon(sprache) {
@@ -738,11 +876,11 @@ function niveauVon(sprache) {
 
 function zeigeNiveau(sprache) {
   const n = niveauVon(sprache);
-  document.getElementById('level-badge').textContent = `⭐ Niv. ${n.idx + 1} · ${n.name}`;
+  document.getElementById('level-badge').textContent = `🪄 ${n.idx + 1}. Rang · ${n.name}`;
   document.getElementById('xp-bar-fill').style.width =
     Math.min(100, ((n.xp - n.lo) / (n.hi - n.lo)) * 100) + '%';
   document.getElementById('xp-label').textContent =
-    n.max ? `${n.xp} XP · Max!` : `${n.xp - n.lo} / ${n.hi - n.lo} XP`;
+    n.max ? `⏳ ${n.xp} Punkte` : `⏳ ${n.xp - n.lo} / ${n.hi - n.lo}`;
 }
 
 function gibXP(sprache, serie) {
@@ -760,7 +898,7 @@ function gibXP(sprache, serie) {
 function zeigeXPGewinn(xp, serie, el) {
   const p = document.createElement('div');
   p.className = 'xp-popup';
-  p.textContent = serie >= 2 ? `+${xp} XP 🔥` : `+${xp} XP`;
+  p.textContent = serie >= 2 ? `+${xp} Punkte ✨` : `+${xp} Punkte`;
   document.body.appendChild(p);
   const r = el.getBoundingClientRect();
   p.style.left = (r.left + r.width / 2) + 'px';
@@ -771,7 +909,7 @@ function zeigeXPGewinn(xp, serie, el) {
 function zeigeLevelUp(name) {
   const el = document.createElement('div');
   el.className = 'level-up-toast';
-  el.innerHTML = `🎉 Level Up!<br>⭐ ${name}`;
+  el.innerHTML = `✦ Neuer Rang ✦<br>🪄 ${name}`;
   document.body.appendChild(el);
   setTimeout(() => el.remove(), 2700);
 }
@@ -1013,7 +1151,7 @@ function zumMenu() {
   stoppeCanvas();
   window.speechSynthesis && window.speechSynthesis.cancel();
   document.body.classList.remove('quiz');
-  document.getElementById('kopf').textContent = '🌟 Sprachen Üben';
+  document.getElementById('kopf').textContent = '✦ Sprachen Üben ✦';
   zeigeMenu();
   window.scrollTo(0, 0);
 }
@@ -1132,16 +1270,16 @@ function loescheFehler(k) {
 }
 
 const lobText = [
-  '✅ Super!', '🌟 Fantastisch!', '🎉 Bravo!', '💪 Klasse!',
-  '🥳 Toll gemacht!', '🌈 Wunderbar!', '🔥 Genial!', '👏 Prima!',
-  '⭐ Ausgezeichnet!', '🚀 Weiter so!', '💫 Magnifique!', '🎊 Parfait!',
+  '✦ Zauberhaft!', '✦ Bravo!', '✦ Perfekt gesprochen!', '✦ Meisterlich!',
+  '✦ Das sass!', '✦ Wunderbar!', '✦ Magnifique!', '✦ Glänzend!',
+  '✦ Ausgezeichnet!', '✦ Weiter so!', '✦ Verzaubernd!', '✦ Parfait!',
 ];
 const trostText = [
-  '❌ Nicht ganz – schau die Antwort an!',
-  '😅 Fast! Merke dir die richtige Antwort.',
-  '🤔 Noch nicht – aber du lernst es!',
-  '💡 Schau genau hin – du schaffst das!',
-  '🌧️ Nächstes Mal klappt es!',
+  'Der Zauber ging daneben – schau die Antwort an.',
+  'Fast! Merke dir die richtige Antwort.',
+  'Noch nicht – aber du lernst es.',
+  'Schau genau hin, dann klappt es.',
+  'Nächster Versuch, nächster Zauber.',
 ];
 function zufall(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
 
@@ -1222,10 +1360,10 @@ function zeigeErgebnis() {
   speichere();
 
   let anim = '', text = '', sterne = '';
-  if (pct === 100)     { text = '🏆 Perfekt! Du bist die Beste!'; sterne = '⭐⭐⭐'; konfetti(); tonFanfare(); }
-  else if (pct >= 70)  { text = '☀️ Sehr gut gemacht!'; sterne = '⭐⭐'; anim = baueSonne(); stoppeCanvas(); tonSonne(); }
-  else if (pct >= 40)  { text = '🌈 Weiter so – du schaffst das!'; sterne = '⭐'; anim = baueRegenbogen(); stoppeCanvas(); tonRegenbogen(); }
-  else                 { text = '🌧️ Üb noch ein bisschen!'; anim = baueRegen(); stoppeCanvas(); tonRegen(); }
+  if (pct === 100)     { text = 'Meisterhaft gezaubert!'; sterne = '✦ ✦ ✦'; konfetti(); tonFanfare(); }
+  else if (pct >= 70)  { text = 'Stark gezaubert!'; sterne = '✦ ✦'; anim = baueZauberstab(); stoppeCanvas(); tonSonne(); }
+  else if (pct >= 40)  { text = 'Die Kerze brennt noch – weiter!'; sterne = '✦'; anim = baueKerze(); stoppeCanvas(); tonRegenbogen(); }
+  else                 { text = 'Der Zauber will noch geübt sein.'; anim = baueNebel(); stoppeCanvas(); tonRegen(); }
 
   document.getElementById('quiz-area').innerHTML = `
     <div class="result-screen">
@@ -1244,40 +1382,48 @@ function zeigeErgebnis() {
 // ════════════════════════════════════════════════════════════
 //  ERGEBNIS-ANIMATIONEN
 // ════════════════════════════════════════════════════════════
-function baueSonne() {
-  const strahlen = Array.from({ length: 12 }, (_, i) =>
-    `<div class="sun-ray" style="transform:rotate(${(i/12)*360}deg) translateX(-50%);animation-delay:${i*0.05}s"></div>`).join('');
-  return `<div class="sun-container">${strahlen}<div class="sun"></div></div>`;
+function baueZauberstab() {
+  const funken = Array.from({ length: 7 }, (_, i) => {
+    const winkel = (-140 + i * 24) * Math.PI / 180;
+    const weite = 40 + Math.random() * 34;
+    return `<div class="funke" style="
+      --dx:${(Math.cos(winkel) * weite).toFixed(0)}px;
+      --dy:${(Math.sin(winkel) * weite).toFixed(0)}px;
+      animation-delay:${(i * 0.22).toFixed(2)}s;"></div>`;
+  }).join('');
+  return `<div class="stab-wrap"><div class="stab"></div><div class="stab-licht"></div>${funken}</div>`;
 }
 
-function baueRegenbogen() {
-  const farben = [
-    { c: '#ef4444', s: 200 }, { c: '#f97316', s: 174 }, { c: '#eab308', s: 148 },
-    { c: '#22c55e', s: 122 }, { c: '#3b82f6', s: 96 },  { c: '#8b5cf6', s: 70 },
-  ];
-  const boegen = farben.map(({ c, s }, i) => `<div class="rainbow-arc" style="
-      width:${s}px;height:${s}px;
-      border-color:${c} transparent transparent transparent;
-      left:${(200 - s) / 2}px;
-      animation-delay:${i * 0.08}s;"></div>`).join('');
-  return `<div class="rainbow-wrap">${boegen}</div>`;
-}
-
-function baueRegen() {
-  const tropfen = Array.from({ length: 18 }, () => `<div class="raindrop" style="
-      left:${Math.random() * 100}%;height:${10 + Math.random() * 14}px;
-      animation-duration:${0.7 + Math.random() * 0.8}s;
-      animation-delay:${Math.random() * 1.5}s;"></div>`).join('');
+function baueKerze() {
   return `
-    <div style="text-align:center;margin-bottom:8px;">
-      <svg class="cloud-svg" width="100" height="55" viewBox="0 0 100 55" fill="none">
-        <ellipse cx="50" cy="38" rx="42" ry="18" fill="#d1d5db"/>
-        <ellipse cx="32" cy="32" rx="22" ry="18" fill="#e5e7eb"/>
-        <ellipse cx="62" cy="28" rx="26" ry="20" fill="#e5e7eb"/>
-        <ellipse cx="50" cy="36" rx="36" ry="16" fill="#f3f4f6"/>
+    <div class="kerze-wrap">
+      <div class="kerze-koerper"></div>
+      <div class="kerze-docht"></div>
+      <div class="kerze-flamme"></div>
+    </div>`;
+}
+
+function baueNebel() {
+  const schwaden = Array.from({ length: 7 }, (_, i) => {
+    const breite = 70 + Math.random() * 90;
+    return `<div class="nebel" style="
+      left:${5 + Math.random() * 60}%;
+      top:${Math.random() * 60}px;
+      width:${breite.toFixed(0)}px;
+      height:${(breite * 0.45).toFixed(0)}px;
+      animation-duration:${(5 + Math.random() * 4).toFixed(1)}s;
+      animation-delay:${(i * 0.7).toFixed(1)}s;"></div>`;
+  }).join('');
+  return `
+    <div style="text-align:center;margin-bottom:4px;">
+      <svg class="kessel" width="96" height="62" viewBox="0 0 96 62" fill="none">
+        <ellipse cx="48" cy="18" rx="30" ry="8" fill="#1b1410"/>
+        <path d="M18 18 C18 44, 30 56, 48 56 C66 56, 78 44, 78 18 Z" fill="#2b2119"/>
+        <path d="M22 20 C23 42, 33 52, 48 52 C63 52, 73 42, 74 20 Z" fill="#3a2d21"/>
+        <ellipse cx="48" cy="18" rx="26" ry="6.5" fill="#4a3b2a"/>
       </svg>
     </div>
-    <div class="rain-wrap">${tropfen}</div>`;
+    <div class="nebel-wrap">${schwaden}</div>`;
 }
 
 // ── Konfetti ──
@@ -1297,8 +1443,9 @@ function konfetti() {
   canvas.width = window.innerWidth;
   canvas.height = window.innerHeight;
   const ctx = canvas.getContext('2d');
-  const farben = ['#ec4899','#f59e0b','#16a34a','#3b82f6','#8b5cf6','#f97316','#ef4444','#fde68a'];
-  const formen = ['circle','rect','star'];
+  // Goldene Funken statt bunter Schnipsel
+  const farben = ['#e9cf7a','#c9a227','#f3dc9b','#8c6b14','#fff3c4','#d9b64a'];
+  const formen = ['star','star','circle'];
 
   function nachschub(anzahl, oben) {
     for (let i = 0; i < anzahl; i++) {

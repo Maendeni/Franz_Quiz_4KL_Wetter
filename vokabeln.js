@@ -243,7 +243,7 @@ const QUIZ_DATEN = {
   gruppen: [
     {
       titel: 'Französisch · 5. Klasse',
-      sprache: 'fr', farbe: '#e11d48', hell: '#ffe4e6', offen: true,
+      sprache: 'fr', farbe: '#7b1f2b', hell: '#f0d9d2', offen: true,
       decks: [
         { id: 'fr5-u1-woerter', icon: '📘', titel: 'Unité 1 · Klassenwortschatz',
           typ: 'vokabeln', woerter: U1_ROSA },
@@ -257,7 +257,7 @@ const QUIZ_DATEN = {
     },
     {
       titel: 'Französisch · 4. Klasse',
-      sprache: 'fr', farbe: '#ec4899', hell: '#fce7f3', offen: false,
+      sprache: 'fr', farbe: '#1f5136', hell: '#d9e8dd', offen: false,
       decks: [
         { id: 'fr4-wetter8',  icon: '🌸', titel: 'Wetter · Liste 8',
           typ: 'vokabeln', woerter: WETTER_8 },
@@ -269,7 +269,7 @@ const QUIZ_DATEN = {
     },
     {
       titel: 'Englisch · 5. Klasse',
-      sprache: 'en', farbe: '#2563eb', hell: '#dbeafe', offen: true,
+      sprache: 'en', farbe: '#1d3a6e', hell: '#d8e0ee', offen: true,
       decks: [
         { id: 'en5-preunit', icon: '🇬🇧', titel: 'Pre-Unit · Wörter',
           typ: 'vokabeln', woerter: EN_PRE_UNIT },
@@ -277,7 +277,7 @@ const QUIZ_DATEN = {
     },
     {
       titel: 'Wiederholen',
-      sprache: null, farbe: '#16a34a', hell: '#f0fdf4', offen: true,
+      sprache: null, farbe: '#6b4a17', hell: '#eee0c4', offen: true,
       decks: [
         { id: 'fehler', icon: '🔁', titel: 'Meine Fehler',
           typ: 'fehler', woerter: [] },

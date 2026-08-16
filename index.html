@@ -941,15 +941,33 @@ function sprich(text, lang) {
   window.speechSynthesis.speak(utt);
 }
 
-// iOS gibt die Sprachausgabe erst nach einer Berührung frei
-let spracheEntsperrt = false;
-function entsperreSprache() {
-  if (spracheEntsperrt || !window.speechSynthesis) return;
+// iOS gibt Sprachausgabe und Töne erst nach einer Berührung frei
+let audioEntsperrt = false;
+function entsperreAudio() {
+  if (audioEntsperrt) return;
+  audioEntsperrt = true;
+
+  // Töne sollen auch dann kommen, wenn der Klingelton-Schalter auf lautlos
+  // steht (Safari 16.4+); ohne diese Zeile schweigt Web Audio dort.
+  try { if (navigator.audioSession) navigator.audioSession.type = 'playback'; } catch (e) {}
+
+  // Stummes Schnipsel abspielen – damit gilt der Ton-Kontext als freigegeben
   try {
-    const u = new SpeechSynthesisUtterance(' ');
-    u.volume = 0;
-    window.speechSynthesis.speak(u);
-    spracheEntsperrt = true;
+    const ctx = tonKontext();
+    if (ctx) {
+      const quelle = ctx.createBufferSource();
+      quelle.buffer = ctx.createBuffer(1, 1, 22050);
+      quelle.connect(ctx.destination);
+      quelle.start(0);
+    }
+  } catch (e) {}
+
+  try {
+    if (window.speechSynthesis) {
+      const u = new SpeechSynthesisUtterance(' ');
+      u.volume = 0;
+      window.speechSynthesis.speak(u);
+    }
   } catch (e) {}
 }
 
@@ -1163,7 +1181,7 @@ const aktuell = { deck: null, modus: null, index: 0, score: 0, beantwortet: fals
 let serie = 0;
 
 function oeffneDeck(id, modus) {
-  entsperreSprache();
+  entsperreAudio();
   const deck = alleDecks[id];
   if (!deck) return;
   aktuell.deck = deck;
@@ -1528,19 +1546,33 @@ function konfetti() {
 //  TÖNE
 // ════════════════════════════════════════════════════════════
 let audioCtx = null;
-function ton(freq, typ, dauer, laut, verzug = 0) {
+
+// iOS: der Ton-Kontext startet angehalten und muss bei jeder Berührung
+// wieder aufgeweckt werden – sonst bleiben die Töne stumm, während die
+// Sprachausgabe (anderer Weg) weiterhin hörbar ist.
+function tonKontext() {
   try {
     if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-    const osc = audioCtx.createOscillator();
-    const gain = audioCtx.createGain();
-    osc.connect(gain); gain.connect(audioCtx.destination);
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    return audioCtx;
+  } catch (e) { return null; }
+}
+
+function ton(freq, typ, dauer, laut, verzug = 0) {
+  try {
+    const ctx = tonKontext();
+    if (!ctx) return;
+    const start = ctx.currentTime + verzug;
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain); gain.connect(ctx.destination);
     osc.type = typ;
-    osc.frequency.setValueAtTime(freq, audioCtx.currentTime + verzug);
-    gain.gain.setValueAtTime(0, audioCtx.currentTime + verzug);
-    gain.gain.linearRampToValueAtTime(laut, audioCtx.currentTime + verzug + 0.01);
-    gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + verzug + dauer);
-    osc.start(audioCtx.currentTime + verzug);
-    osc.stop(audioCtx.currentTime + verzug + dauer);
+    osc.frequency.setValueAtTime(freq, start);
+    gain.gain.setValueAtTime(0, start);
+    gain.gain.linearRampToValueAtTime(laut, start + 0.01);
+    gain.gain.exponentialRampToValueAtTime(0.001, start + dauer);
+    osc.start(start);
+    osc.stop(start + dauer);
   } catch (e) {}
 }
 function tonRichtig()    { ton(523,'sine',0.15,0.3,0); ton(784,'sine',0.2,0.3,0.12); }

@@ -1185,7 +1185,8 @@ function pruefe(btn, gewaehlt, k) {
   }
   speichere();
 
-  if (vorlesen && k.sprechAntwort) {
+  // Nur fremdsprachige Antworten vorlesen – deutsche Wörter kann sie selbst
+  if (vorlesen && k.sprechAntwort && k.sprechAntwort.lang !== 'de-DE') {
     sprechTimer = setTimeout(() => sprich(k.sprechAntwort.text, k.sprechAntwort.lang), 600);
   }
 

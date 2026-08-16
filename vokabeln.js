@@ -211,11 +211,29 @@ const ER_VERBEN = [
 ];
 
 // ════════════════════════════════════════════════════════════
-//  ENGLISCH, 5. Klasse
+//  ENGLISCH, 5. Klasse · Vocabulary Pre-Unit
 //  → Wörter hier eintragen: { fr: "englisch", de: "deutsch" }
 //    (das Feld heisst überall fr, egal welche Fremdsprache)
 // ════════════════════════════════════════════════════════════
-const EN_UNIT_1 = [
+const EN_PRE_UNIT = [
+  { fr: "pen", de: "der Stift" },
+  { fr: "pencil", de: "der Bleistift" },
+  { fr: "teacher", de: "der Lehrer / die Lehrerin" },
+  { fr: "ruler", de: "das Lineal" },
+  { fr: "rubber", de: "der Radiergummi" },
+  { fr: "pencil case", de: "das Etui" },
+  { fr: "glue", de: "der Leim" },
+  { fr: "scissors", de: "die Schere" },
+  { fr: "folder", de: "der Ordner" },
+  { fr: "bin", de: "der Papierkorb" },
+  { fr: "desk", de: "das Pult" },
+  { fr: "chair", de: "der Stuhl" },
+  { fr: "schoolbag", de: "der Schulsack" },
+  { fr: "paper", de: "das Papier" },
+  { fr: "book", de: "das Buch" },
+  { fr: "sharpener", de: "der Spitzer" },
+  { fr: "student", de: "der Schüler / die Schülerin" },
+  { fr: "whiteboard", de: "die Wandtafel" },
 ];
 
 // ════════════════════════════════════════════════════════════
@@ -253,8 +271,8 @@ const QUIZ_DATEN = {
       titel: 'Englisch · 5. Klasse',
       sprache: 'en', farbe: '#2563eb', hell: '#dbeafe', offen: true,
       decks: [
-        { id: 'en5-unit1', icon: '🇬🇧', titel: 'Unit 1 · Wörter',
-          typ: 'vokabeln', woerter: EN_UNIT_1 },
+        { id: 'en5-preunit', icon: '🇬🇧', titel: 'Pre-Unit · Wörter',
+          typ: 'vokabeln', woerter: EN_PRE_UNIT },
       ],
     },
     {

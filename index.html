@@ -926,10 +926,27 @@ function setzeVorlesen(an) {
   speichere();
 }
 
+// Grammatik-Kürzel sind zum Lesen gedacht, nicht zum Hören: «(m pl)» käme
+// sonst als «m plus» aus dem Lautsprecher. Auf der Karte bleibt das Kürzel
+// stehen, nur die Stimme bekommt die ausgeschriebene Form.
+const KUERZEL = [
+  [/\(\s*m\s*pl\s*\)/gi, 'masculin pluriel'],
+  [/\(\s*f\s*pl\s*\)/gi, 'féminin pluriel'],
+  [/\(\s*m\s*\)/gi,      'masculin'],
+  [/\(\s*f\s*\)/gi,      'féminin'],
+];
+
+function fuerDieStimme(text, lang) {
+  let t = text;
+  if (lang === 'fr-FR') KUERZEL.forEach(([muster, wort]) => { t = t.replace(muster, wort); });
+  t = t.replace(/\s*\/\s*/g, ', ');   // «la géo / la géographie» → kurze Pause
+  return t.replace(/\s+/g, ' ').trim();
+}
+
 function sprich(text, lang) {
   if (!window.speechSynthesis || !text) return;
   window.speechSynthesis.cancel();
-  const utt = new SpeechSynthesisUtterance(text);
+  const utt = new SpeechSynthesisUtterance(fuerDieStimme(text, lang));
   utt.lang = lang;
   utt.rate = 0.88;
   utt.pitch = 1.05;

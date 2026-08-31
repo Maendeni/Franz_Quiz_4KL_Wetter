@@ -237,6 +237,35 @@ const EN_PRE_UNIT = [
 ];
 
 // ════════════════════════════════════════════════════════════
+//  DIS DONC ! UNITÉ 1 · Klassenwortschatz (lachsfarben), 5. Klasse
+//  Wochentage und Tätigkeiten
+// ════════════════════════════════════════════════════════════
+const U1_LACHS = [
+  { fr: "les jours de la semaine (m pl)", de: "die Wochentage" },
+  { fr: "lundi", de: "Montag" },
+  { fr: "mardi", de: "Dienstag" },
+  { fr: "mercredi", de: "Mittwoch" },
+  { fr: "jeudi", de: "Donnerstag" },
+  { fr: "vendredi", de: "Freitag" },
+  { fr: "samedi", de: "Samstag" },
+  { fr: "dimanche", de: "Sonntag" },
+  { fr: "une école", de: "eine Schule", art: 'une', nomen: 'école' },
+  { fr: "calculer", de: "rechnen" },
+  { fr: "dessiner", de: "zeichnen" },
+  { fr: "chanter", de: "singen" },
+  { fr: "expérimenter", de: "experimentieren" },
+  { fr: "parler français", de: "Französisch sprechen" },
+  { fr: "parler anglais", de: "Englisch sprechen" },
+  { fr: "explorer l'étranger", de: "das Ausland erkunden" },
+  { fr: "visiter un musée", de: "ein Museum besuchen" },
+  { fr: "tricoter", de: "stricken" },
+  { fr: "réciter un poème", de: "ein Gedicht aufsagen" },
+  { fr: "bricoler", de: "basteln" },
+  { fr: "sauter", de: "springen, hüpfen" },
+  { fr: "grimper", de: "klettern" },
+];
+
+// ════════════════════════════════════════════════════════════
 //  AUFBAU DES MENÜS
 // ════════════════════════════════════════════════════════════
 const QUIZ_DATEN = {
@@ -247,8 +276,10 @@ const QUIZ_DATEN = {
       decks: [
         { id: 'fr5-u1-woerter', icon: '📘', titel: 'Unité 1 · Klassenwortschatz',
           typ: 'vokabeln', woerter: U1_ROSA },
+        { id: 'fr5-u1-lachs', icon: '📅', titel: 'Unité 1 · Wochentage & Tätigkeiten',
+          typ: 'vokabeln', woerter: U1_LACHS },
         { id: 'fr5-u1-artikel', icon: '✏️', titel: 'Unité 1 · un / une',
-          typ: 'artikel', woerter: baueArtikel(U1_ROSA) },
+          typ: 'artikel', woerter: baueArtikel(U1_ROSA.concat(U1_LACHS)) },
         { id: 'fr5-konjugation', icon: '💜', titel: 'Konjugation · -er-Verben',
           typ: 'konjugation', woerter: baueKonjugation(ER_VERBEN) },
         { id: 'fr5-zahlen', icon: '🔢', titel: 'Zahlen 1–1000',

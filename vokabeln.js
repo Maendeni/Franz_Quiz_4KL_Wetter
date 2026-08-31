@@ -208,6 +208,19 @@ const ER_VERBEN = [
   { inf: 'briller',   stamm: 'brill' },
   { inf: 'souffler',  stamm: 'souffl' },
   { inf: 'tomber',    stamm: 'tomb' },
+  // aus der zweiten Wörterliste der Unité 1
+  { inf: 'calculer',     stamm: 'calcul' },
+  { inf: 'dessiner',     stamm: 'dessin' },
+  { inf: 'chanter',      stamm: 'chant' },
+  { inf: 'expérimenter', stamm: 'expériment' },
+  { inf: 'parler',       stamm: 'parl' },
+  { inf: 'explorer',     stamm: 'explor' },
+  { inf: 'visiter',      stamm: 'visit' },
+  { inf: 'tricoter',     stamm: 'tricot' },
+  { inf: 'réciter',      stamm: 'récit' },
+  { inf: 'bricoler',     stamm: 'bricol' },
+  { inf: 'sauter',       stamm: 'saut' },
+  { inf: 'grimper',      stamm: 'grimp' },
 ];
 
 // ════════════════════════════════════════════════════════════

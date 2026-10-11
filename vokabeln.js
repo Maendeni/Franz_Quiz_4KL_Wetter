@@ -249,8 +249,8 @@ const EN_PRE_UNIT = [
   { fr: "whiteboard", de: "die Wandtafel" },
 ];
 
-// ── Englisch · Name und Familie (schriftlich / mündlich) ──
-const EN_FAMILIE = [
+// ── Englisch · Unit 1, Teil 1 (schriftlich / mündlich) ──
+const EN_U1_TEIL1 = [
   { fr: "name", de: "der Name" },
   { fr: "family", de: "die Familie" },
   { fr: "I am from... / I'm from...", de: "Ich komme aus / von..." },
@@ -336,8 +336,8 @@ const QUIZ_DATEN = {
       decks: [
         { id: 'en5-preunit', icon: '🇬🇧', titel: 'Pre-Unit · Wörter',
           typ: 'vokabeln', woerter: EN_PRE_UNIT },
-        { id: 'en5-familie', icon: '👪', titel: 'Name & Familie',
-          typ: 'vokabeln', woerter: EN_FAMILIE },
+        { id: 'en5-u1-teil1', icon: '📗', titel: 'Unit 1 · Teil 1',
+          typ: 'vokabeln', woerter: EN_U1_TEIL1 },
       ],
     },
     {

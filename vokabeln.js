@@ -224,7 +224,7 @@ const ER_VERBEN = [
 ];
 
 // ════════════════════════════════════════════════════════════
-//  ENGLISCH, 5. Klasse · Vocabulary Pre-Unit
+//  ENGLISCH, 5. Klasse · Unit 1, Vocabulary Pre-Unit
 //  → Wörter hier eintragen: { fr: "englisch", de: "deutsch" }
 //    (das Feld heisst überall fr, egal welche Fremdsprache)
 // ════════════════════════════════════════════════════════════
@@ -334,7 +334,7 @@ const QUIZ_DATEN = {
       titel: 'Englisch · 5. Klasse',
       sprache: 'en', farbe: '#1d3a6e', hell: '#d8e0ee', offen: true,
       decks: [
-        { id: 'en5-preunit', icon: '🇬🇧', titel: 'Pre-Unit · Wörter',
+        { id: 'en5-preunit', icon: '📙', titel: 'Unit 1 · Pre-Unit',
           typ: 'vokabeln', woerter: EN_PRE_UNIT },
         { id: 'en5-u1-teil1', icon: '📗', titel: 'Unit 1 · Teil 1',
           typ: 'vokabeln', woerter: EN_U1_TEIL1 },

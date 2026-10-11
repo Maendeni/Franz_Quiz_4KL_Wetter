@@ -249,6 +249,25 @@ const EN_PRE_UNIT = [
   { fr: "whiteboard", de: "die Wandtafel" },
 ];
 
+// ── Englisch · Name und Familie (schriftlich / mündlich) ──
+const EN_FAMILIE = [
+  { fr: "name", de: "der Name" },
+  { fr: "family", de: "die Familie" },
+  { fr: "I am from... / I'm from...", de: "Ich komme aus / von..." },
+  { fr: "Who...?", de: "Wer?" },
+  { fr: "sister", de: "die Schwester" },
+  { fr: "brother", de: "der Bruder" },
+  { fr: "I like...", de: "Ich mag..." },
+  { fr: "I love...", de: "Ich liebe..." },
+  { fr: "What...?", de: "Welche...? Was...?" },
+  { fr: "Where ... from?", de: "Woher...?" },
+  { fr: "How...?", de: "Wie...?" },
+  { fr: "father", de: "der Vater" },
+  { fr: "mother", de: "die Mutter" },
+  { fr: "English", de: "das Englisch" },
+  { fr: "Swiss German", de: "das Schweizerdeutsch" },
+];
+
 // ════════════════════════════════════════════════════════════
 //  DIS DONC ! UNITÉ 1 · Klassenwortschatz (lachsfarben), 5. Klasse
 //  Wochentage und Tätigkeiten
@@ -317,6 +336,8 @@ const QUIZ_DATEN = {
       decks: [
         { id: 'en5-preunit', icon: '🇬🇧', titel: 'Pre-Unit · Wörter',
           typ: 'vokabeln', woerter: EN_PRE_UNIT },
+        { id: 'en5-familie', icon: '👪', titel: 'Name & Familie',
+          typ: 'vokabeln', woerter: EN_FAMILIE },
       ],
     },
     {

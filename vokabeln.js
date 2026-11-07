@@ -368,6 +368,8 @@ const QUIZ_DATEN = {
           typ: 'artikel', woerter: baueArtikel(U1_ROSA.concat(U1_LACHS)) },
         { id: 'fr5-u2-woerter', icon: '👪', titel: 'Unité 2 · Familie',
           typ: 'vokabeln', woerter: U2_BLASSGELB },
+        { id: 'fr5-u2-artikel', icon: '✏️', titel: 'Unité 2 · un / une',
+          typ: 'artikel', woerter: baueArtikel(U2_BLASSGELB) },
         { id: 'fr5-konjugation', icon: '💜', titel: 'Konjugation · -er-Verben',
           typ: 'konjugation', woerter: baueKonjugation(ER_VERBEN) },
         { id: 'fr5-zahlen', icon: '🔢', titel: 'Zahlen 1–1000',

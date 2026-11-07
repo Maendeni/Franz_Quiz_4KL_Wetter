@@ -268,6 +268,29 @@ const EN_U1_TEIL1 = [
   { fr: "Swiss German", de: "das Schweizerdeutsch" },
 ];
 
+// ── Englisch · Unit 1, Teil 2 (New World 1, Coursebook S. 18, nur mündlich) ──
+const EN_U1_TEIL2 = [
+  { fr: "climbing", de: "das Klettern" },
+  { fr: "dancing", de: "das Tanzen" },
+  { fr: "cooking", de: "das Kochen" },
+  { fr: "rowing", de: "das Rudern" },
+  { fr: "horse riding", de: "das Reiten" },
+  { fr: "hiking", de: "das Wandern" },
+  { fr: "painting", de: "das Malen" },
+  { fr: "swimming", de: "das Schwimmen" },
+  { fr: "My favorite day is...", de: "Mein Lieblingstag ist..." },
+  { fr: "Monday", de: "Montag" },
+  { fr: "Tuesday", de: "Dienstag" },
+  { fr: "Wednesday", de: "Mittwoch" },
+  { fr: "Thursday", de: "Donnerstag" },
+  { fr: "Friday", de: "Freitag" },
+  { fr: "Saturday", de: "Samstag" },
+  { fr: "Sunday", de: "Sonntag" },
+  { fr: "In the morning", de: "am Morgen / am Vormittag" },
+  { fr: "In the afternoon", de: "am Nachmittag" },
+  { fr: "In the evening", de: "am Abend" },
+];
+
 // ════════════════════════════════════════════════════════════
 //  DIS DONC ! UNITÉ 1 · Klassenwortschatz (lachsfarben), 5. Klasse
 //  Wochentage und Tätigkeiten
@@ -338,6 +361,8 @@ const QUIZ_DATEN = {
           typ: 'vokabeln', woerter: EN_PRE_UNIT },
         { id: 'en5-u1-teil1', icon: '📗', titel: 'Unit 1 · Teil 1',
           typ: 'vokabeln', woerter: EN_U1_TEIL1 },
+        { id: 'en5-u1-teil2', icon: '📕', titel: 'Unit 1 · Teil 2',
+          typ: 'vokabeln', woerter: EN_U1_TEIL2 },
       ],
     },
     {

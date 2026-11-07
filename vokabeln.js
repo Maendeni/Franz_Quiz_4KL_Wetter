@@ -321,6 +321,37 @@ const U1_LACHS = [
 ];
 
 // ════════════════════════════════════════════════════════════
+//  DIS DONC ! UNITÉ 2 · Klassenwortschatz (blassgelb), 5. Klasse
+//  Die Familie. art/nomen wie gehabt als Grundlage für un/une.
+// ════════════════════════════════════════════════════════════
+const U2_BLASSGELB = [
+  { fr: "la famille", de: "die Familie", art: 'une', nomen: 'famille' },
+  { fr: "un / une enfant", de: "ein Kind" },
+  { fr: "la mère / la maman", de: "die Mutter", art: 'une', nomen: 'mère' },
+  { fr: "le père / le papa", de: "der Vater", art: 'un', nomen: 'père' },
+  { fr: "les parents (m pl)", de: "die Eltern", art: 'des', nomen: 'parents' },
+  { fr: "la soeur", de: "die Schwester", art: 'une', nomen: 'soeur' },
+  { fr: "le frère", de: "der Bruder", art: 'un', nomen: 'frère' },
+  { fr: "la grand-mère", de: "die Grossmutter", art: 'une', nomen: 'grand-mère' },
+  { fr: "le grand-père", de: "der Grossvater", art: 'un', nomen: 'grand-père' },
+  { fr: "les grands-parents (m pl)", de: "die Grosseltern", art: 'des', nomen: 'grands-parents' },
+  { fr: "la tante", de: "die Tante", art: 'une', nomen: 'tante' },
+  { fr: "un oncle", de: "ein Onkel", art: 'un', nomen: 'oncle' },
+  { fr: "la cousine", de: "die Cousine", art: 'une', nomen: 'cousine' },
+  { fr: "le cousin", de: "der Cousin", art: 'un', nomen: 'cousin' },
+  { fr: "un bébé", de: "ein Baby / ein Kleinkind", art: 'un', nomen: 'bébé' },
+  { fr: "la fille", de: "das Mädchen / die Tochter", art: 'une', nomen: 'fille' },
+  { fr: "le fils", de: "der Sohn", art: 'un', nomen: 'fils' },
+  { fr: "le petit-fils", de: "der Enkel", art: 'un', nomen: 'petit-fils' },
+  { fr: "la petite-fille", de: "die Enkelin", art: 'une', nomen: 'petite-fille' },
+  { fr: "les petits-enfants (m)", de: "die Grosskinder", art: 'des', nomen: 'petits-enfants' },
+  { fr: "le chien", de: "der Hund", art: 'un', nomen: 'chien' },
+  { fr: "le chat", de: "die Katze", art: 'un', nomen: 'chat' },
+  { fr: "le membre de la famille", de: "das Familienmitglied", art: 'un', nomen: 'membre de la famille' },
+  { fr: "un arbre généalogique", de: "ein Stammbaum", art: 'un', nomen: 'arbre généalogique' },
+];
+
+// ════════════════════════════════════════════════════════════
 //  AUFBAU DES MENÜS
 // ════════════════════════════════════════════════════════════
 const QUIZ_DATEN = {
@@ -335,6 +366,8 @@ const QUIZ_DATEN = {
           typ: 'vokabeln', woerter: U1_LACHS },
         { id: 'fr5-u1-artikel', icon: '✏️', titel: 'Unité 1 · un / une',
           typ: 'artikel', woerter: baueArtikel(U1_ROSA.concat(U1_LACHS)) },
+        { id: 'fr5-u2-woerter', icon: '👪', titel: 'Unité 2 · Familie',
+          typ: 'vokabeln', woerter: U2_BLASSGELB },
         { id: 'fr5-konjugation', icon: '💜', titel: 'Konjugation · -er-Verben',
           typ: 'konjugation', woerter: baueKonjugation(ER_VERBEN) },
         { id: 'fr5-zahlen', icon: '🔢', titel: 'Zahlen 1–1000',

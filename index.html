@@ -93,7 +93,7 @@
     justify-content: center;
   }
   .back-btn:active { transform: scale(0.92); }
-  body.quiz .back-btn { display: flex; }
+  body.quiz .back-btn, body.konto .back-btn { display: flex; }
 
   header h1 {
     font-family: 'Cinzel', Georgia, serif;
@@ -113,8 +113,9 @@
   }
 
   /* ── STARTMENÜ ───────────────────────────── */
-  body.quiz #menu { display: none; }
+  body.quiz #menu, body.konto #menu, body.konto #quiz { display: none; }
   body:not(.quiz) #quiz { display: none; }
+  body:not(.konto) #konto { display: none; }
 
   #quiz { animation: reinRechts 0.25s ease; }
   @keyframes reinRechts {
@@ -693,6 +694,94 @@
     50%      { transform: rotate(1.5deg); }
   }
 
+  /* ── KONTO ───────────────────────────────── */
+  .konto-leiste {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    text-align: left;
+    border: 1px solid rgba(201,162,39,0.35);
+    border-radius: var(--radius);
+    padding: 10px 14px;
+    margin-bottom: 14px;
+    background: rgba(36,26,19,0.75);
+    color: var(--gold-hell);
+  }
+  .konto-leiste:active { transform: scale(0.985); }
+  .konto-leiste.warnung { border-color: #c27c2c; }
+  .konto-leiste .emoji { font-size: 1.3rem; }
+  .konto-leiste .t { flex: 1; min-width: 0; }
+  .konto-leiste .t b { display: block; font-family: 'Cinzel', Georgia, serif; font-size: 0.88rem; }
+  .konto-leiste .t span { font-size: 0.8rem; font-style: italic; color: #b9a37a; }
+  .konto-leiste .go { font-size: 1.3rem; color: var(--gold); }
+
+  #konto { animation: reinRechts 0.25s ease; }
+  .konto-karte {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    color: var(--tinte);
+    background:
+      linear-gradient(125deg, rgba(255,255,255,0.4) 0%, transparent 30%),
+      var(--pergament);
+    border: 1px solid var(--pergament-dunkel);
+    border-top: 4px solid var(--gold);
+    border-radius: var(--radius);
+    padding: 22px 18px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.55);
+  }
+  .konto-karte h2 { font-family: 'Cinzel', Georgia, serif; font-size: 1.1rem; text-align: center; }
+  .konto-karte p { font-size: 0.95rem; line-height: 1.4; }
+  .konto-karte label { display: flex; flex-direction: column; gap: 4px; font-size: 0.85rem; font-weight: 600; color: var(--tinte-blass); }
+  .konto-karte input[type=email], .konto-karte input[type=password], .konto-karte input[type=text] {
+    font: inherit;
+    font-size: 1rem;
+    color: var(--tinte);
+    padding: 10px 12px;
+    border: 1px solid #b89d68;
+    border-radius: 8px;
+    background: var(--pergament-hell);
+  }
+  .konto-karte label.haken { flex-direction: row; align-items: center; gap: 8px; font-weight: 500; }
+  .konto-karte .restart-btn, .konto-karte .menu-btn { width: 100%; }
+  .konto-karte .menu-btn { color: var(--tinte); border-color: #b89d68; }
+  .konto-meldung { padding: 8px 10px; border-radius: 6px; background: rgba(47,125,79,0.15); color: #1f5a37; }
+  .konto-meldung.fehler { background: rgba(163,43,43,0.12); color: var(--wrong); }
+  .link-btn {
+    background: none;
+    border: none;
+    color: #b9a37a;
+    font-size: 0.85rem;
+    text-decoration: underline;
+    padding: 10px 4px;
+    min-height: 40px;
+  }
+  .konto-karte .link-btn { color: var(--tinte-blass); }
+  #konto > .link-btn { display: block; margin: 14px auto 0; }
+  .profil-liste { display: flex; flex-direction: column; gap: 8px; }
+  .profil-zeile { display: flex; gap: 8px; }
+  .profil {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 56px;
+    padding: 10px 14px;
+    text-align: left;
+    background: var(--pergament-hell);
+    border: 1px solid var(--pergament-dunkel);
+    border-left: 5px solid var(--gold);
+    border-radius: 6px;
+    font-family: 'Cinzel', Georgia, serif;
+    font-size: 1rem;
+  }
+  .profil.aktiv { box-shadow: 0 0 0 2px var(--gold); }
+  .profil .emoji { font-size: 1.4rem; }
+  .profil-weg { width: 48px; border: 1px solid var(--wrong); border-radius: 6px; background: transparent; color: var(--wrong); font-size: 1.1rem; }
+  .profil-neu { display: flex; flex-direction: column; gap: 10px; padding-top: 12px; border-top: 1px solid var(--pergament-dunkel); }
+  .konto-fuss { display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 4px 12px; margin-top: 12px; font-size: 0.85rem; color: #b9a37a; }
+
   /* ── XP-POPUP & LEVEL-UP ─────────────────── */
   .xp-popup {
     position: fixed;
@@ -750,6 +839,7 @@
 
   <!-- ══ STARTMENÜ ══ -->
   <div id="menu">
+    <div id="konto-leiste"></div>
     <button class="resume" id="resume-btn" style="display:none"></button>
     <div id="gruppen"></div>
     <div class="hinweis" id="hinweis"></div>
@@ -774,8 +864,13 @@
 
     <div id="quiz-area"></div>
   </div>
+
+  <!-- ══ KONTO (nur wenn in config.js eingerichtet) ══ -->
+  <div id="konto"></div>
 </div>
 
+<script src="config.js"></script>
+<script src="konto.js"></script>
 <script src="vokabeln.js"></script>
 <script>
 // ════════════════════════════════════════════════════════════
@@ -786,6 +881,11 @@
 const SPEICHER = 'franz_quiz_v1';
 const MAX_FEHLER = 80;
 
+// Mit Konto hat jedes Kinderprofil seinen eigenen Speicher (konto.js)
+function speicherSchluessel() {
+  return (window.Konto && Konto.schluessel()) || SPEICHER;
+}
+
 function leereDaten() {
   return { version: 1, xp: { fr: 0, en: 0 }, decks: {}, fehler: [],
            letztes: null, laufend: null, vorlesen: true };
@@ -794,12 +894,12 @@ function leereDaten() {
 function ladeDaten() {
   let d = leereDaten();
   try {
-    const roh = localStorage.getItem(SPEICHER);
+    const roh = localStorage.getItem(speicherSchluessel());
     if (roh) {
       const gespeichert = JSON.parse(roh);
       d = Object.assign(d, gespeichert);
       d.xp = Object.assign({ fr: 0, en: 0 }, gespeichert.xp);
-    } else {
+    } else if (speicherSchluessel() === SPEICHER) {
       // Umzug vom alten Format: die bisherigen XP zählten alle für Französisch
       const alt = parseInt(localStorage.getItem('quiz_xp') || '0');
       if (alt > 0) d.xp.fr = alt;
@@ -809,10 +909,25 @@ function ladeDaten() {
 }
 
 function speichere() {
-  try { localStorage.setItem(SPEICHER, JSON.stringify(daten)); } catch (e) {}
+  // Zeitstempel entscheidet beim Abgleich zwischen Geräten, welcher Stand neuer ist
+  daten.geaendert = Date.now();
+  try { localStorage.setItem(speicherSchluessel(), JSON.stringify(daten)); } catch (e) {}
+  if (window.Konto) Konto.geaendert();
 }
 
 const daten = ladeDaten();
+
+// Ersetzt den ganzen Stand, z.B. beim Profilwechsel oder wenn ein
+// anderes Gerät neuer ist. Der Zeitstempel bleibt dabei unverändert.
+function uebernehmeDaten(neu) {
+  const d = Object.assign(leereDaten(), neu || {});
+  d.xp = Object.assign({ fr: 0, en: 0 }, (neu || {}).xp);
+  Object.keys(daten).forEach(k => delete daten[k]);
+  Object.assign(daten, d);
+  vorlesen = daten.vorlesen !== false;
+  try { localStorage.setItem(speicherSchluessel(), JSON.stringify(daten)); } catch (e) {}
+  if (!document.body.classList.contains('quiz') && !document.body.classList.contains('konto')) zeigeMenu();
+}
 
 // ════════════════════════════════════════════════════════════
 //  DECKS AUFBEREITEN
@@ -1129,6 +1244,7 @@ function untertitel(deck) {
 }
 
 function zeigeMenu() {
+  if (window.Konto) Konto.renderLeiste();
   document.getElementById('gruppen').innerHTML = QUIZ_DATEN.gruppen.map((g, gi) => {
     const n = g.sprache ? niveauVon(g.sprache) : null;
     return `
@@ -1190,7 +1306,7 @@ function zumMenu() {
   stoppeTimer();
   stoppeCanvas();
   window.speechSynthesis && window.speechSynthesis.cancel();
-  document.body.classList.remove('quiz');
+  document.body.classList.remove('quiz', 'konto');
   document.getElementById('kopf').textContent = '✦ Sprachen Üben ✦';
   zeigeMenu();
   window.scrollTo(0, 0);
@@ -1651,6 +1767,7 @@ function tonRegen()      { ton(330,'triangle',0.2,0.15,0); ton(392,'triangle',0.
 // ════════════════════════════════════════════════════════════
 document.getElementById('autoread-toggle').checked = vorlesen;
 zeigeMenu();
+Konto.start();
 </script>
 </body>
 </html>
